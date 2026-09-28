@@ -1,0 +1,130 @@
+{
+  "downloaded": "2026-09-28",
+  "files": {
+    "cost_report_2011.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/88b44803-c778-4f09-a931-209790cce05a/CostReport_2011_Final.csv",
+      "bytes": 4149942,
+      "sha256": "213f3397f66ce78e106b5ed203ce5e5ec8398614900db384726ba32cdeebfff8"
+    },
+    "cost_report_2012.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/f68c4851-b3fc-4721-8ebc-99153d0ddb3e/CostReport_2012_Final.csv",
+      "bytes": 4202896,
+      "sha256": "6906072578d9cf31cb0bd0a534649a7fb260c44acc322aa0a52ae3978e69b380"
+    },
+    "cost_report_2013.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/4ebf87a0-301f-4883-95af-97afe0a0fc0e/CostReport_2013_Final.csv",
+      "bytes": 4240651,
+      "sha256": "11f25b40a6d825de36997677331225b281697bc9d7eee083ccc2363b9935809a"
+    },
+    "cost_report_2014.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/bae8e5e6-952c-4018-8866-dc24f94e31c4/CostReport_2014_Final.csv",
+      "bytes": 4245505,
+      "sha256": "0d06d8ba04a23629407df722f88dea8a62d8adf29abb7171338c336fc35cf02d"
+    },
+    "cost_report_2015.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/d199f117-6689-4dc4-b329-57d83b62a761/CostReport_2015_Final.csv",
+      "bytes": 4240941,
+      "sha256": "87215207bf6ca78abd69d09181169a28555e707d009aa1d29539bd99335d60cf"
+    },
+    "cost_report_2016.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/25d73dc8-9786-47e3-879c-14def5a73028/CostReport_2016_Final.csv",
+      "bytes": 4207482,
+      "sha256": "0406c6d06505061e0d8acf41b46894893660449a2b83fe9415ac0b5fa218b520"
+    },
+    "cost_report_2017.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/853560f1-b43d-4c82-8d63-0a9276dd08e5/CostReport_2017_Final.csv",
+      "bytes": 4175717,
+      "sha256": "2214386d546cf675b8e32a51e7be68163e87ff5b15a6fa6a9f70f70d6878dc32"
+    },
+    "cost_report_2018.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/f5e15e03-0256-4e27-966a-74dfea926b72/CostReport_2018_Final.csv",
+      "bytes": 4175448,
+      "sha256": "8b073ec6b362753fbfafcbc5633bee9762fb5703d058d98164953615177646ba"
+    },
+    "cost_report_2019.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/832d1e75-27eb-44bb-af75-a6b827fd4fd9/CostReport_2019_Final.csv",
+      "bytes": 4140691,
+      "sha256": "70e38bb7da59a8cbc8e5449c81110fab3c3894eea2ef21511c9f49621aa06112"
+    },
+    "cost_report_2020.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/bd432d70-3689-4e8e-a8a5-5e7bf5232cb6/CostReport_2020_Final.csv",
+      "bytes": 4110906,
+      "sha256": "d485aad82c62cd391118045f8c45c5ff18af0fcb315ef3935803343f1b88fb58"
+    },
+    "cost_report_2021.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/7e94fd9d-9ef2-4275-b993-299e30f5b371/CostReport_2021_Final.csv",
+      "bytes": 4116177,
+      "sha256": "95c97a48cdd3cb52ed27c4f9e988c0c28e8f8a0796cf42588ead67d0e367c3ed"
+    },
+    "cost_report_2022.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-11/c298e529-8bee-401a-bbd8-a38e74e19ab2/CostReport_2022_Final.csv",
+      "bytes": 4115596,
+      "sha256": "a661e206201a405f57548f6705e66269f740e6694540e9645529f2591d839b89"
+    },
+    "cost_report_2023.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2026-01/3c39f483-c7e0-4025-8396-4df76942e10f/CostReport_2023_Final.csv",
+      "bytes": 4130294,
+      "sha256": "614f3d94dfeb84092ca775f90913ab4f843233a4fa90c3df3013efeb5221a757"
+    },
+    "inpatient_2013.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/26990132-59b8-4de0-ba6e-811a756ff0c3/MUP_INP_RY24_P04_V10_DY13_Prv.CSV",
+      "bytes": 962453,
+      "sha256": "344b36d41e3f188e37fcd334c1689814018672b497f9204c837957faabf72445"
+    },
+    "inpatient_2014.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/9c770459-6517-4763-ad3e-991ddf7c5d9f/MUP_INP_RY24_P04_V10_DY14_Prv.CSV",
+      "bytes": 956447,
+      "sha256": "c3f0ddc0dcee298949f4039cfc71f011151d20a8b5028ecd4ceb4fdee6f16d3f"
+    },
+    "inpatient_2015.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/1f667627-0c55-4237-b8e1-6545f9d43e75/MUP_INP_RY24_P04_V10_DY15_Prv.CSV",
+      "bytes": 945906,
+      "sha256": "333ceaeb5926b4635f425d4a8abf6d17b1ecbbcd87cbf49285b1da7891807827"
+    },
+    "inpatient_2016.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/16a75a1e-060b-42dd-b647-a7536eb0373c/MUP_INP_RY24_P04_V10_DY16_Prv.CSV",
+      "bytes": 938104,
+      "sha256": "54b6a21b28096820cfc46e533029af36cbc1dc44b4a9cd534e05767c06b50b75"
+    },
+    "inpatient_2017.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/c016da49-525e-4c64-adc8-4bef70eabf32/MUP_INP_RY24_P04_V10_DY17_Prv.CSV",
+      "bytes": 1929466,
+      "sha256": "74dd1c18443055c08fc6a4564b920b6b43870591cfef40e27ca1eb01d42d13db"
+    },
+    "inpatient_2018.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/7bb03a80-a0ed-4fd9-a7c8-c851c70d484b/MUP_INP_RY24_P04_V10_DY18_Prv.CSV",
+      "bytes": 1920457,
+      "sha256": "60da57d12dd1435878beb14c20e21c85bc95838c4c16d9cae5a8211369d759d2"
+    },
+    "inpatient_2019.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/1c1f6004-9fe2-43d0-907c-203322cd40e7/MUP_INP_RY24_P04_V10_DY19_Prv.CSV",
+      "bytes": 1890111,
+      "sha256": "f2bb123d8fdadcc86ee99168d9a435b070f65d6485e13f2b9718c33b5a396826"
+    },
+    "inpatient_2020.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/c2f4c3df-c7ec-4402-8064-7f7d2586ba56/MUP_INP_RY24_P04_V10_DY20_Prv.CSV",
+      "bytes": 1859836,
+      "sha256": "09adbac6d206e17a23e34952cb0c787b4f36166b2e3bdf4fb48d258819e22cef"
+    },
+    "inpatient_2021.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/ef80e842-4949-46e8-ab66-0c4c4310d400/MUP_INP_RY24_P04_V10_DY21_Prv.CSV",
+      "bytes": 1844331,
+      "sha256": "e846567c3790aeebddbfac2ff664f019e07d244142cbd754e334ddaaeefaba46"
+    },
+    "inpatient_2022.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2024-05/e95428bb-00a6-46e2-9be2-ffd9c6fe5186/MUP_INP_RY24_P04_V10_DY22_Prv.CSV",
+      "bytes": 1833223,
+      "sha256": "fd7936a716b4973691020cb5d6775eecbe5f0365a27c8acbcbfed240381da77a"
+    },
+    "inpatient_2023.csv": {
+      "url": "https://data.cms.gov/sites/default/files/2025-05/10e4b7e9-40c5-437b-b4d6-61801b6681f2/MUP_INP_RY25_P04_V10_DY23_Prv.CSV",
+      "bytes": 1811896,
+      "sha256": "b5e74604a1ce1d5ca6ee8506595a77a0076f21aaa3e90a42c2516ed8100b4c1d"
+    },
+    "kff_expansion_status.csv": {
+      "url": "https://www.kff.org/affordable-care-act/issue-brief/status-of-state-medicaid-expansion-decisions/ (embedded CSV)",
+      "bytes": 3427,
+      "sha256": "ca5eb9f4d54efbd1d3d22d6a5f804aa54537735f9de1875a89fe8b7295946e6f"
+    }
+  }
+}
