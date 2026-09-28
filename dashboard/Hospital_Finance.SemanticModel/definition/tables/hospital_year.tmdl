@@ -42,7 +42,7 @@ table hospital_year
 		lineageTag: 11bc6a32-6514-5a0a-b596-2a23b69bfc95
 
 	measure 'Total Revenue' = SUM ( hospital_year[total_revenue] )
-		formatString: "$"#,0,,,"B"
+		formatString: #,0
 		displayFolder: Core
 		lineageTag: eea20e2e-cd93-5c47-9d78-4b505ca570f7
 

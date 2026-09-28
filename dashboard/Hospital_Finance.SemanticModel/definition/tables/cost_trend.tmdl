@@ -2,7 +2,7 @@ table cost_trend
 	lineageTag: f4a50ba7-8e2a-53cc-8178-ed03b9758faa
 
 	measure 'Cost per Stay' = SUM ( cost_trend[cost_per_stay] )
-		formatString: "$"#,0
+		formatString: """$""#,0"
 		displayFolder: Costs
 		lineageTag: 509f7133-3712-51ac-a1cb-a34bf17d48a7
 
@@ -12,19 +12,19 @@ table cost_trend
 		lineageTag: 8935d49b-043d-5b97-a0cc-725e090ea138
 
 	measure Markup = SUM ( cost_trend[charge_to_cost] )
-		formatString: 0.0"x"
+		formatString: "0.0""x"""
 		displayFolder: Costs
 		lineageTag: 340b405f-d0b2-5ee6-853d-669d19eb0827
 
 	measure 'Billed per Dollar' = SUM ( cost_trend[us_billed_per_dollar] )
-		formatString: "$"0.00
+		formatString: """$""0.00"
 		displayFolder: Costs
 		lineageTag: 08976c83-7e6d-51e5-ae25-558db0a3a947
 
 	measure 'Cost Sel' =
 			VAR _y = [Selected Year]
 			RETURN CALCULATE ( [Cost per Stay], cost_trend[fiscal_year] = _y )
-		formatString: "$"#,0
+		formatString: """$""#,0"
 		displayFolder: KPI
 		lineageTag: 573640c3-2e13-53cf-ad68-0678ffaa4275
 
@@ -38,14 +38,14 @@ table cost_trend
 	measure 'Markup Sel' =
 			VAR _y = [Selected Year]
 			RETURN CALCULATE ( [Markup], cost_trend[fiscal_year] = _y )
-		formatString: 0.0"x"
+		formatString: "0.0""x"""
 		displayFolder: KPI
 		lineageTag: 4c7fc1f7-e0b4-5cd8-b482-84dd5c102011
 
 	measure 'Billed Sel' =
 			VAR _y = [Selected Year]
 			RETURN CALCULATE ( [Billed per Dollar], cost_trend[fiscal_year] = _y )
-		formatString: "$"0.00
+		formatString: """$""0.00"
 		displayFolder: KPI
 		lineageTag: a842bc45-5405-5c5f-927c-92ed16cd47ea
 

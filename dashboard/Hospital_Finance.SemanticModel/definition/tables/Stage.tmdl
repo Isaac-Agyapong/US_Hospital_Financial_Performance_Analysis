@@ -25,5 +25,5 @@ table Stage
 		mode: import
 		source =
 				DATATABLE ( "order", INTEGER, "stage", STRING, {
-				    { 1, "All hospitals" }, { 2, "Lost money this year" },
-				    { 3, "Lost money 2 years in a row" }, { 4, "Lost money 3+ years in a row" } } )
+				    { 1, "All hospitals" }, { 2, "Lost money" },
+				    { 3, "2 years in a row" }, { 4, "3+ years in a row" } } )

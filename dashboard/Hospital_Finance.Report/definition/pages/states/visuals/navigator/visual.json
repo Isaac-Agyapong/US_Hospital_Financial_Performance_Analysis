@@ -231,6 +231,24 @@
                   "Value": "false"
                 }
               }
+            },
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#08100F'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
+                }
+              }
             }
           },
           "selector": {
@@ -245,6 +263,24 @@
                   "Value": "false"
                 }
               }
+            },
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#08100F'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
+                }
+              }
             }
           },
           "selector": {
@@ -257,6 +293,24 @@
               "expr": {
                 "Literal": {
                   "Value": "false"
+                }
+              }
+            },
+            "lineColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#08100F'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "100D"
                 }
               }
             }
@@ -340,9 +394,9 @@
   },
   "position": {
     "x": 8,
-    "y": 124,
+    "y": 116,
     "z": 0,
-    "height": 210,
+    "height": 172,
     "width": 208,
     "tabOrder": 0
   }

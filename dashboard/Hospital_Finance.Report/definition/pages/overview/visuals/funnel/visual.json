@@ -315,6 +315,13 @@
                   "Value": "true"
                 }
               }
+            },
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
             }
           }
         }
@@ -417,7 +424,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Lost money this year'"
+                        "Value": "'Lost money'"
                       }
                     }
                   }
@@ -458,7 +465,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Lost money 2 years in a row'"
+                        "Value": "'2 years in a row'"
                       }
                     }
                   }
@@ -499,7 +506,7 @@
                     },
                     "Right": {
                       "Literal": {
-                        "Value": "'Lost money 3+ years in a row'"
+                        "Value": "'3+ years in a row'"
                       }
                     }
                   }

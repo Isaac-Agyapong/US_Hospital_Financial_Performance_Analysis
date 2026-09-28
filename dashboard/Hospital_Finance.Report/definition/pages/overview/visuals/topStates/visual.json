@@ -294,7 +294,7 @@
             "innerPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "24L"
+                  "Value": "12L"
                 }
               }
             },

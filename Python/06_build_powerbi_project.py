@@ -142,7 +142,7 @@ MEASURES = [
     ("hospital_year", "Stressed Count", "IF ( SUM ( hospital_year[has_prior] ) > 0, SUM ( hospital_year[stressed] ) )", INT, "Core"),
     ("hospital_year", "Typical Margin", "MEDIAN ( hospital_year[total_margin] )", PCT1, "Core"),
     ("hospital_year", "Combined Margin", "DIVIDE ( SUM ( hospital_year[net_income] ), SUM ( hospital_year[total_revenue] ) )", PCT1, "Core"),
-    ("hospital_year", "Total Revenue", "SUM ( hospital_year[total_revenue] )", '"$"#,0,,,"B"', "Core"),
+    ("hospital_year", "Total Revenue", "SUM ( hospital_year[total_revenue] )", "#,0", "Core"),
 
     # ---- overview KPIs (selected year)
     ("hospital_year", "Losing Sel", SEL + f"RETURN {at_y('Losing Share')}", PCT, "KPI"),
@@ -400,8 +400,8 @@ def table_tmdl(table, columns):
         if home != table:
             continue
         out += [f"\tmeasure {q(name)} =", indent(dax, 3)] if "\n" in dax else [f"\tmeasure {q(name)} = {dax}"]
-        if fmt:
-            out.append(f"\t\tformatString: {fmt}")
+        if fmt:   # TMDL: a format containing quotes must itself be quoted, with inner quotes doubled
+            out.append("\t\tformatString: " + ('"' + fmt.replace('"', '""') + '"' if '"' in fmt else fmt))
         out += [f"\t\tdisplayFolder: {folder}", f"\t\tlineageTag: {tag(table, 'm', name)}", ""]
     for home, name, dtype, dax in CALC_COLUMNS:
         if home == table:
@@ -479,8 +479,8 @@ def build_model():
     write(d / "tables" / "Stage.tmdl", calc_table(
         "Stage", [("order", "int64", True, None), ("stage", "string", False, "order")],
         'DATATABLE ( "order", INTEGER, "stage", STRING, {\n'
-        '    { 1, "All hospitals" }, { 2, "Lost money this year" },\n'
-        '    { 3, "Lost money 2 years in a row" }, { 4, "Lost money 3+ years in a row" } } )'))
+        '    { 1, "All hospitals" }, { 2, "Lost money" },\n'
+        '    { 3, "2 years in a row" }, { 4, "3+ years in a row" } } )'))
     write(d / "relationships.tmdl", "\n".join([
         f"relationship {tag('rel', 'states')}", "\tfromColumn: hospital_year.state_abbrev", "\ttoColumn: states.state_abbrev", "",
         f"relationship {tag('rel', 'profile')}", "\tfromColumn: hospital_year.ccn", "\ttoColumn: hospital_profile.ccn", ""]))
@@ -670,7 +670,8 @@ def navigator():
                 "text": [state("default", {"fontColor": solid(MUTED), "fontSize": lit("11D"), "fontFamily": s(FONT),
                                            "horizontalAlignment": s("left"), "leftMargin": lit("14D")}),
                          state("selected", {"fontColor": solid(TEXT), "bold": lit("true")})],
-                "outline": [state(k, {"show": lit("false")}) for k in ("default", "hover", "selected")],
+                "outline": [state(k, {"show": lit("false"), "lineColor": solid(SIDEBAR), "transparency": lit("100D")})
+                            for k in ("default", "hover", "selected")],
                 "accentBar": [state("default", {"show": lit("false")}),
                               state("selected", {"show": lit("true"), "position": s("Left"), "width": lit("3D"),
                                                  "accentBarColor": solid(MINT)})],
@@ -723,27 +724,27 @@ FULL = 706 - R1
 
 
 def sidebar(page, filters="all"):
-    page.sidebar_labels.append(("PAGES", 108))
-    page.add("navigator", 8, 124, 208, 210, navigator())
+    page.sidebar_labels.append(("PAGES", 104))
+    page.add("navigator", 8, 116, 208, 172, navigator())
     if filters == "all" or filters == "year":
-        page.sidebar_labels.append(("FILTERS", 346))
-        page.add("fYear", 12, 362, 200, 50, slicer("Years", "year", "Year", "year", default=2023))
+        page.sidebar_labels.append(("FILTERS", 304))
+        page.add("fYear", 12, 322, 200, 58, slicer("Years", "year", "Year", "year", default=2023))
     if filters == "all":
-        page.add("fType", 12, 418, 200, 50, slicer("hospital_year", "hospital_type", "Hospital type", "type"))
-        page.add("fOwner", 12, 474, 200, 50, slicer("hospital_year", "ownership", "Owner", "owner"))
-        page.add("fArea", 12, 530, 200, 50, slicer("hospital_year", "rural_urban", "Rural or urban", "area"))
-        page.add("fState", 12, 586, 200, 50, slicer("states", "state_name", "State", "state", search=True))
+        page.add("fType", 12, 384, 200, 58, slicer("hospital_year", "hospital_type", "Hospital type", "type"))
+        page.add("fOwner", 12, 446, 200, 58, slicer("hospital_year", "ownership", "Owner", "owner"))
+        page.add("fArea", 12, 508, 200, 58, slicer("hospital_year", "rural_urban", "Rural or urban", "area"))
+        page.add("fState", 12, 570, 200, 58, slicer("states", "state_name", "State", "state", search=True))
     if filters == "year":
-        page.add("costNote", 14, 418, 196, 60, textbox(
+        page.add("costNote", 14, 388, 196, 60, textbox(
             [("Costs and prices are national figures for general hospitals, so only the year filter applies here.",
               9, False, MUTED)]))
     if filters == "hospital":
-        page.sidebar_labels.append(("LOOK UP", 346))
-        page.add("search", 12, 362, 200, 56, slicer("hospital_profile", "hospital_label", "Hospital name", "hospital",
+        page.sidebar_labels.append(("LOOK UP", 304))
+        page.add("search", 12, 322, 200, 58, slicer("hospital_profile", "hospital_label", "Hospital name", "hospital",
                                                      default="Cleveland Clinic Hospital (Cleveland, OH)", search=True))
-        page.add("searchNote", 14, 424, 196, 60, textbox(
+        page.add("searchNote", 14, 388, 196, 60, textbox(
             [("Open the box and type part of a name, for example Mayo or Memorial.", 9, False, MUTED)]))
-    page.add("credit", 14, 650, 200, 56, textbox(
+    page.add("credit", 14, 642, 200, 64, textbox(
         [("Data: CMS Hospital Cost Reports 2011-2023, CMS Medicare inpatient file, KFF", 8, False, MUTED),
          ("Built by Isaac Agyapong", 10, True, TEXT, FONT_BOLD)]))
 
@@ -804,10 +805,10 @@ def build_pages():
         "funnel", {"Category": [C("Stage", "stage", "Stage")], "Y": [M("Funnel Count", "Hospitals")]},
         "=Funnel Title", "From one bad year to lasting trouble",
         sort=(C("Stage", "stage"), "Ascending"),
-        objects={**labels(11), "categoryAxis": [{"properties": {"color": solid(MUTED), "fontSize": lit("10D")}}],
-                 "dataPoint": fill_by_value("Stage", "stage", {"All hospitals": SKY_D, "Lost money this year": CORAL_L,
-                                                              "Lost money 2 years in a row": CORAL,
-                                                              "Lost money 3+ years in a row": CORAL_D})}))
+        objects={"labels": [{"properties": {"show": lit("true"), "color": solid(TEXT), "fontSize": lit("11D"),
+                                            "bold": lit("true"), "labelDisplayUnits": lit("1D")}}], "categoryAxis": [{"properties": {"color": solid(MUTED), "fontSize": lit("10D")}}],
+                 "dataPoint": fill_by_value("Stage", "stage", {"All hospitals": SKY_D, "Lost money": CORAL_L,
+                                                              "2 years in a row": CORAL, "3+ years in a row": CORAL_D})}))
     p1.tile("donut", X0, R2, third, RH, chart(
         "donutChart", {"Category": [C("hospital_year", "ownership", "Owner")], "Y": [M("Losing Count Sel", "Hospitals losing money")]},
         "=Donut Title", None,
@@ -826,14 +827,14 @@ def build_pages():
     p1.tile("topStates", X0 + 2 * (third + GAP), R2, W - 2 * (third + GAP), RH, chart(
         "clusteredBarChart", {"Category": [C("states", "state_name", "State")], "Y": [M("Top 8 Losing", "Share losing money")]},
         "=States Title", None, sort=(M("Top 8 Losing"), "Descending"), tooltip_page="stateTooltip",
-        objects={**axes(cat_size=10, inner_padding=24, label_area=35), **labels(10),
+        objects={**axes(cat_size=10, inner_padding=12, label_area=35), **labels(10),
                  "dataPoint": [{"properties": {"fill": solid(CORAL)}}]}))
 
     # ---------------------------------------------------------------- 2. Who is struggling
     p2 = Page("struggling", "Who Is Struggling")
     sidebar(p2)
     header(p2, "Who is struggling",
-           "Financial stress = lost money two years in a row. Critical access = small rural hospitals (25 beds or fewer) paid on their costs.")
+           "Financial stress = lost money two years in a row. Critical access = small hospitals with 25 beds or fewer.")
     p2.tile("groups", X0, KPI_Y, 520, 706 - KPI_Y - RH - GAP, chart(
         "clusteredBarChart", {"Category": [C("hospital_year", "group_label", "Group")], "Y": [M("Group Stressed Sel", "Share under financial stress")]},
         "=Group Title", "Share that lost money two years in a row. Amber = rural, blue = urban. Groups with 30+ hospitals.",
@@ -894,7 +895,7 @@ def build_pages():
     p3.tile("top10", X0 + 560 + GAP, R1, tw, RH, chart(
         "tableEx", {"Values": [C("states", "state_name", "State"), C("states", "medicaid_status", "Medicaid"),
                                M("Top 10 Hospitals", "Hospitals"), M("Top 10 Losing", "Losing money"),
-                               M("Top 10 Margin", "Typical margin")]},
+                               M("Top 10 Margin", "Margin")]},
         "The 10 states with the most hospitals losing money", None, tooltip_page="stateTooltip",
         sort=(M("Top 10 Losing"), "Descending"),
         objects={"values": [{"properties": {"fontSize": lit("10D"), "fontColor": solid(TEXT), "backColorPrimary": solid(TILE),
@@ -909,8 +910,8 @@ def build_pages():
                                                                    "hideText": lit("false")}},
                                        "selector": {"metadata": "hospital_year.Top 10 Losing"}}],
                  "columnWidth": [{"properties": {"value": lit(f"{w}D")}, "selector": {"metadata": k}} for k, w in {
-                     "states.state_name": 104, "states.medicaid_status": 98, "hospital_year.Top 10 Hospitals": 80,
-                     "hospital_year.Top 10 Losing": 104, "hospital_year.Top 10 Margin": 88}.items()]}))
+                     "states.state_name": 88, "states.medicaid_status": 104, "hospital_year.Top 10 Hospitals": 66,
+                     "hospital_year.Top 10 Losing": 90, "hospital_year.Top 10 Margin": 66}.items()]}))
     p3.tile("unpaid", X0 + 560 + GAP, R2, tw, RH, chart(
         "lineChart", {"Category": [C("unpaid_care", "fiscal_year", "Year")], "Series": [C("unpaid_care", "medicaid_status", "Medicaid")],
                       "Y": [M("Unpaid Care Share", "Unpaid care, share of costs")]},
@@ -950,7 +951,7 @@ def build_pages():
         "clusteredBarChart", {"Category": [C("billed_state", "state_name", "State")], "Y": [M("Top Billed", "Billed per $1 paid")]},
         "Nevada hospitals bill Medicare $8.85 for every $1 they are paid", "Top 10 states, Medicare inpatient stays 2023",
         sort=(M("Top Billed"), "Descending"),
-        objects={**axes(cat_size=10, inner_padding=26, label_area=35), **labels(10),
+        objects={**axes(cat_size=10, inner_padding=10, label_area=35), **labels(10),
                  "dataPoint": [{"properties": {"fill": solid(VIOLET)}}]}))
     p4.tile("prices", X0 + half + GAP, R2, W - half - GAP, RH, chart(
         "lineChart", {"Category": [C("cost_trend", "fiscal_year", "Year")],

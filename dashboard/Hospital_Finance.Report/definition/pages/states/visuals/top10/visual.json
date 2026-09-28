@@ -80,7 +80,7 @@
               },
               "queryRef": "hospital_year.Top 10 Margin",
               "nativeQueryRef": "Top 10 Margin",
-              "displayName": "Typical margin"
+              "displayName": "Margin"
             }
           ]
         }
@@ -503,7 +503,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "104D"
+                  "Value": "88D"
                 }
               }
             }
@@ -517,7 +517,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "98D"
+                  "Value": "104D"
                 }
               }
             }
@@ -531,7 +531,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "80D"
+                  "Value": "66D"
                 }
               }
             }
@@ -545,7 +545,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "104D"
+                  "Value": "90D"
                 }
               }
             }
@@ -559,7 +559,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "88D"
+                  "Value": "66D"
                 }
               }
             }

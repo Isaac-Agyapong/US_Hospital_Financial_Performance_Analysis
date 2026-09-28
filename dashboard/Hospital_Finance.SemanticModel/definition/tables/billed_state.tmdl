@@ -5,7 +5,7 @@ table billed_state
 			VAR _cur = SUM ( billed_state[billed_per_dollar] )
 			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( billed_state[state_name] ), "@b", CALCULATE ( SUM ( billed_state[billed_per_dollar] ) ) ), REMOVEFILTERS ( billed_state ) )
 			RETURN IF ( HASONEVALUE ( billed_state[state_name] ) && COUNTROWS ( FILTER ( _all, [@b] > _cur ) ) < 10, _cur )
-		formatString: "$"0.00
+		formatString: """$""0.00"
 		displayFolder: Costs
 		lineageTag: 1adfabd8-7b40-5300-9dfd-6eb6811732c9
 

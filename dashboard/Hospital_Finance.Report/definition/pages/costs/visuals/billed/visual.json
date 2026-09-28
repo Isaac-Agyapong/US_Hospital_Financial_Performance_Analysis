@@ -314,7 +314,7 @@
             "innerPadding": {
               "expr": {
                 "Literal": {
-                  "Value": "26L"
+                  "Value": "10L"
                 }
               }
             },
