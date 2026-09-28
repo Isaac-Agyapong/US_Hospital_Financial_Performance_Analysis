@@ -1,0 +1,235 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.4.0/schema.json",
+  "name": "mapLegend",
+  "visual": {
+    "visualType": "textbox",
+    "drillFilterOtherVisuals": true,
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Losing money   ",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#8FA5A3",
+                      "fontWeight": "bold"
+                    }
+                  },
+                  {
+                    "value": "■ ",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#2B4A4C"
+                    }
+                  },
+                  {
+                    "value": "under 20%   ",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#8FA5A3"
+                    }
+                  },
+                  {
+                    "value": "■ ",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#6B4A4C"
+                    }
+                  },
+                  {
+                    "value": "20-30%   ",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#8FA5A3"
+                    }
+                  },
+                  {
+                    "value": "■ ",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#A14F4F"
+                    }
+                  },
+                  {
+                    "value": "30-40%   ",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#8FA5A3"
+                    }
+                  },
+                  {
+                    "value": "■ ",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#C2413F"
+                    }
+                  },
+                  {
+                    "value": "40-50%   ",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#8FA5A3"
+                    }
+                  },
+                  {
+                    "value": "■ ",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#FF6B6B"
+                    }
+                  },
+                  {
+                    "value": "50%+   ",
+                    "textStyle": {
+                      "fontSize": "9pt",
+                      "color": "#8FA5A3"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "background": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#132426'"
+                    }
+                  }
+                }
+              }
+            },
+            "border": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#132426'"
+                    }
+                  }
+                }
+              }
+            },
+            "foreground": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8FA5A3'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "bottom": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            },
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            },
+            "right": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "position": {
+    "x": 256,
+    "y": 666,
+    "z": 18000,
+    "height": 30,
+    "width": 528,
+    "tabOrder": 18000
+  }
+}

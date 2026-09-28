@@ -1,0 +1,52 @@
+state_abbrev,state_name,hospitals,billed_per_dollar,us_billed_per_dollar
+CA,California,278,6.16,4.87
+NH,New Hampshire,13,3.87,4.87
+OR,Oregon,33,3.15,4.87
+TX,Texas,278,6.24,4.87
+ND,North Dakota,7,3.12,4.87
+NV,Nevada,22,8.85,4.87
+OH,Ohio,119,4.01,4.87
+KY,Kentucky,62,4.68,4.87
+NY,New York,132,4.63,4.87
+HI,Hawaii,12,3.03,4.87
+NM,New Mexico,29,4.14,4.87
+MS,Mississippi,57,4.64,4.87
+IN,Indiana,81,4.71,4.87
+DC,District of Columbia,6,4.24,4.87
+WV,West Virginia,25,3.95,4.87
+NE,Nebraska,24,3.8,4.87
+MO,Missouri,66,4.51,4.87
+FL,Florida,168,7.16,4.87
+ME,Maine,17,3.2,4.87
+AR,Arkansas,45,3.96,4.87
+WI,Wisconsin,67,3.67,4.87
+NC,North Carolina,84,3.74,4.87
+CT,Connecticut,26,3.39,4.87
+SD,South Dakota,17,4.15,4.87
+RI,Rhode Island,10,2.7,4.87
+OK,Oklahoma,75,5.07,4.87
+ID,Idaho,15,4.3,4.87
+GA,Georgia,95,4.87,4.87
+MN,Minnesota,46,3.24,4.87
+PA,Pennsylvania,134,5.39,4.87
+MD,Maryland,44,1.11,4.87
+AK,Alaska,8,5.31,4.87
+WY,Wyoming,10,2.81,4.87
+LA,Louisiana,84,4.69,4.87
+MT,Montana,12,2.98,4.87
+IL,Illinois,118,4.15,4.87
+TN,Tennessee,79,4.78,4.87
+WA,Washington,47,4.41,4.87
+NJ,New Jersey,63,6.32,4.87
+MI,Michigan,90,3.38,4.87
+MA,Massachusetts,54,2.52,4.87
+AL,Alabama,80,5.31,4.87
+UT,Utah,32,3.58,4.87
+IA,Iowa,31,3.91,4.87
+VT,Vermont,6,3.93,4.87
+CO,Colorado,50,6.79,4.87
+SC,South Carolina,52,5.14,4.87
+VA,Virginia,71,4.43,4.87
+DE,Delaware,6,3.25,4.87
+AZ,Arizona,64,5.43,4.87
+KS,Kansas,48,5.51,4.87

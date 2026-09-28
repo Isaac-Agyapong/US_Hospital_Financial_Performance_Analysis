@@ -1,0 +1,18 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table hospital_year
+ref table states
+ref table hospital_profile
+ref table unpaid_care
+ref table cost_trend
+ref table billed_state
+ref table Years
+ref table Stage

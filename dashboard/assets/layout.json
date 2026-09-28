@@ -1,0 +1,379 @@
+{
+  "colors": {
+    "bg_top": "#0F1C1D",
+    "bg_bottom": "#0A1314",
+    "sidebar": "#08100F",
+    "tile": "#132426",
+    "tile_border": "#20373A",
+    "text": "#EEF4F3",
+    "muted": "#8FA5A3",
+    "mint": "#34D399",
+    "sky": "#60A5FA",
+    "glow": "#34D399",
+    "ink_dark": "#0B1718"
+  },
+  "pages": {
+    "overview": {
+      "tiles": [
+        {
+          "x": 240,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "↘",
+          "label": "Hospitals losing money",
+          "accent": "#FF6B6B"
+        },
+        {
+          "x": 499,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "⚠",
+          "label": "Lost money 2 years in a row",
+          "accent": "#FF6B6B"
+        },
+        {
+          "x": 758,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "%",
+          "label": "Typical profit margin",
+          "accent": "#34D399"
+        },
+        {
+          "x": 1017,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "$",
+          "label": "Total hospital revenue",
+          "accent": "#60A5FA"
+        },
+        {
+          "x": 240,
+          "y": 198,
+          "w": 600,
+          "h": 248
+        },
+        {
+          "x": 852,
+          "y": 198,
+          "w": 412,
+          "h": 248
+        },
+        {
+          "x": 240,
+          "y": 458,
+          "w": 333,
+          "h": 248
+        },
+        {
+          "x": 585,
+          "y": 458,
+          "w": 333,
+          "h": 248
+        },
+        {
+          "x": 930,
+          "y": 458,
+          "w": 334,
+          "h": 248
+        }
+      ],
+      "sidebar_labels": [
+        [
+          "PAGES",
+          108
+        ],
+        [
+          "FILTERS",
+          346
+        ]
+      ]
+    },
+    "struggling": {
+      "tiles": [
+        {
+          "x": 240,
+          "y": 80,
+          "w": 520,
+          "h": 366
+        },
+        {
+          "x": 772,
+          "y": 80,
+          "w": 492,
+          "h": 366
+        },
+        {
+          "x": 240,
+          "y": 458,
+          "w": 506,
+          "h": 248
+        },
+        {
+          "x": 758,
+          "y": 458,
+          "w": 506,
+          "h": 248
+        }
+      ],
+      "sidebar_labels": [
+        [
+          "PAGES",
+          108
+        ],
+        [
+          "FILTERS",
+          346
+        ]
+      ]
+    },
+    "states": {
+      "tiles": [
+        {
+          "x": 240,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "⚠",
+          "label": "Hardest-hit state",
+          "accent": "#FF6B6B"
+        },
+        {
+          "x": 499,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "⛨",
+          "label": "States where half or more lost money",
+          "accent": "#FF6B6B"
+        },
+        {
+          "x": 758,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "⚕",
+          "label": "Losing money, Medicaid expanded",
+          "accent": "#60A5FA"
+        },
+        {
+          "x": 1017,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "$",
+          "label": "Unpaid care, no expansion",
+          "accent": "#FBBF24"
+        },
+        {
+          "x": 240,
+          "y": 198,
+          "w": 560,
+          "h": 508
+        },
+        {
+          "x": 812,
+          "y": 198,
+          "w": 452,
+          "h": 248
+        },
+        {
+          "x": 812,
+          "y": 458,
+          "w": 452,
+          "h": 248
+        }
+      ],
+      "sidebar_labels": [
+        [
+          "PAGES",
+          108
+        ],
+        [
+          "FILTERS",
+          346
+        ]
+      ]
+    },
+    "costs": {
+      "tiles": [
+        {
+          "x": 240,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "$",
+          "label": "Typical cost of a hospital stay",
+          "accent": "#60A5FA"
+        },
+        {
+          "x": 499,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "⏱",
+          "label": "Agency staff, share of salaries",
+          "accent": "#FBBF24"
+        },
+        {
+          "x": 758,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "↗",
+          "label": "List price vs actual cost",
+          "accent": "#A78BFA"
+        },
+        {
+          "x": 1017,
+          "y": 80,
+          "w": 247,
+          "h": 106,
+          "icon": "⚖",
+          "label": "Billed per $1 Medicare paid",
+          "accent": "#A78BFA"
+        },
+        {
+          "x": 240,
+          "y": 198,
+          "w": 506,
+          "h": 248
+        },
+        {
+          "x": 758,
+          "y": 198,
+          "w": 506,
+          "h": 248
+        },
+        {
+          "x": 240,
+          "y": 458,
+          "w": 506,
+          "h": 248
+        },
+        {
+          "x": 758,
+          "y": 458,
+          "w": 506,
+          "h": 248
+        }
+      ],
+      "sidebar_labels": [
+        [
+          "PAGES",
+          108
+        ],
+        [
+          "FILTERS",
+          346
+        ]
+      ]
+    },
+    "lookup": {
+      "tiles": [
+        {
+          "x": 240,
+          "y": 80,
+          "w": 1024,
+          "h": 64
+        },
+        {
+          "x": 240,
+          "y": 156,
+          "w": 247,
+          "h": 106,
+          "icon": "%",
+          "label": "Profit margin",
+          "accent": "#34D399"
+        },
+        {
+          "x": 499,
+          "y": 156,
+          "w": 247,
+          "h": 106,
+          "icon": "$",
+          "label": "Profit or loss",
+          "accent": "#60A5FA"
+        },
+        {
+          "x": 758,
+          "y": 156,
+          "w": 247,
+          "h": 106,
+          "icon": "⌛",
+          "label": "Years in a row losing money",
+          "accent": "#FF6B6B"
+        },
+        {
+          "x": 1017,
+          "y": 156,
+          "w": 247,
+          "h": 106,
+          "icon": "★",
+          "label": "Rank in its state",
+          "accent": "#FBBF24"
+        },
+        {
+          "x": 240,
+          "y": 274,
+          "w": 560,
+          "h": 432
+        },
+        {
+          "x": 812,
+          "y": 274,
+          "w": 452,
+          "h": 246
+        },
+        {
+          "x": 812,
+          "y": 532,
+          "w": 452,
+          "h": 174
+        }
+      ],
+      "sidebar_labels": [
+        [
+          "PAGES",
+          108
+        ],
+        [
+          "LOOK UP",
+          346
+        ]
+      ]
+    },
+    "dataNotes": {
+      "tiles": [
+        {
+          "x": 240,
+          "y": 80,
+          "w": 333,
+          "h": 626
+        },
+        {
+          "x": 585,
+          "y": 80,
+          "w": 333,
+          "h": 626
+        },
+        {
+          "x": 930,
+          "y": 80,
+          "w": 333,
+          "h": 626
+        }
+      ],
+      "sidebar_labels": [
+        [
+          "PAGES",
+          108
+        ]
+      ]
+    }
+  }
+}

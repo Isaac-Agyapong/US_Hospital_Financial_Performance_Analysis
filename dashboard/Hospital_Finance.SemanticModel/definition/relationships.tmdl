@@ -1,0 +1,7 @@
+relationship 9fdf1356-2cc4-5eda-ac3f-8f04f2c554c4
+	fromColumn: hospital_year.state_abbrev
+	toColumn: states.state_abbrev
+
+relationship 827c1cc6-b9e3-5179-872d-330385212b6c
+	fromColumn: hospital_year.ccn
+	toColumn: hospital_profile.ccn

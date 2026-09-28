@@ -1,0 +1,70 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/1.2.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY24SU10",
+      "reportVersionAtImport": "5.59",
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "HospitalDarkTheme.json",
+      "reportVersionAtImport": "5.59",
+      "type": "RegisteredResources"
+    }
+  },
+  "layoutOptimization": "None",
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY24SU10",
+          "path": "BaseThemes/CY24SU10.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "HospitalDarkTheme.json",
+          "path": "HospitalDarkTheme.json",
+          "type": "CustomTheme"
+        },
+        {
+          "name": "bg_overview.png",
+          "path": "bg_overview.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg_struggling.png",
+          "path": "bg_struggling.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg_states.png",
+          "path": "bg_states.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg_costs.png",
+          "path": "bg_costs.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg_lookup.png",
+          "path": "bg_lookup.png",
+          "type": "Image"
+        },
+        {
+          "name": "bg_dataNotes.png",
+          "path": "bg_dataNotes.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ]
+}

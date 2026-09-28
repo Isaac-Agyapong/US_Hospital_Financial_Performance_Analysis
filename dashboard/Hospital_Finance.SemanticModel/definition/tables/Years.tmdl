@@ -1,0 +1,16 @@
+table Years
+	lineageTag: a02ea96d-88b8-5831-89ab-731fbaf036bb
+
+	column year
+		dataType: int64
+		lineageTag: 99c0c110-be4c-5ad6-a590-d4812e8da364
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [year]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Years = calculated
+		mode: import
+		source =
+				SELECTCOLUMNS ( GENERATESERIES ( 2011, 2023, 1 ), "year", [Value] )

@@ -1,0 +1,58 @@
+table states
+	lineageTag: dea8498e-d1b1-5ba8-a8c7-69ce65c7eb4b
+
+	column state_abbrev
+		dataType: string
+		lineageTag: 5c97b8ac-ab8b-5cec-b18d-1d2a35aa12b4
+		summarizeBy: none
+		sourceColumn: state_abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_name
+		dataType: string
+		lineageTag: c890b188-eeca-5428-bf28-78ee30103a13
+		summarizeBy: none
+		sourceColumn: state_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column medicaid_status
+		dataType: string
+		lineageTag: c2c274b5-002f-5abd-abbd-f33838ce7501
+		summarizeBy: none
+		sourceColumn: medicaid_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column tile_x
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 5b6957bf-1f42-5ada-831d-6884f458038c
+		summarizeBy: none
+		sourceColumn: tile_x
+
+		annotation SummarizationSetBy = Automatic
+
+	column tile_y
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 8349a0bd-75ce-57a1-a26d-cb54c041d939
+		summarizeBy: none
+		sourceColumn: tile_y
+
+		annotation SummarizationSetBy = Automatic
+
+	partition states = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "states.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"state_abbrev", type text}, {"state_name", type text}, {"medicaid_status", type text}, {"tile_x", Int64.Type}, {"tile_y", Int64.Type}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

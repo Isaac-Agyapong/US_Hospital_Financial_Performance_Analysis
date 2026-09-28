@@ -1,0 +1,610 @@
+table hospital_year
+	lineageTag: 16a40d2e-ca83-5f73-a63f-b5fd7f45b357
+
+	measure 'Selected Year' = SELECTEDVALUE ( Years[year], 2023 )
+		formatString: 0
+		displayFolder: Core
+		lineageTag: e2ab5bd3-51ab-5cad-a0cc-da82c1fb5495
+
+	measure 'Hospital Count' = COUNTROWS ( hospital_year )
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: 48531a87-c23d-594c-a65a-54cbea3a0a11
+
+	measure 'Losing Share' = DIVIDE ( SUM ( hospital_year[loss] ), COUNTROWS ( hospital_year ) )
+		formatString: 0%
+		displayFolder: Core
+		lineageTag: d9a63f63-fedf-5906-b953-32e4bd8f90ab
+
+	measure 'Losing Count' = SUM ( hospital_year[loss] )
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: 0835b6da-081b-53ce-b5ca-c5a35359ba78
+
+	measure 'Stressed Share' = DIVIDE ( SUM ( hospital_year[stressed] ), SUM ( hospital_year[has_prior] ) )
+		formatString: 0%
+		displayFolder: Core
+		lineageTag: 880fd3cd-faec-53a8-bf39-001001040c1d
+
+	measure 'Stressed Count' = IF ( SUM ( hospital_year[has_prior] ) > 0, SUM ( hospital_year[stressed] ) )
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: bb1c6fe8-b8f4-5b6c-a8db-7441fe5f65f4
+
+	measure 'Typical Margin' = MEDIAN ( hospital_year[total_margin] )
+		formatString: 0.0%
+		displayFolder: Core
+		lineageTag: 6a65384e-1da9-50e1-8ec8-1ad7960ba90d
+
+	measure 'Combined Margin' = DIVIDE ( SUM ( hospital_year[net_income] ), SUM ( hospital_year[total_revenue] ) )
+		formatString: 0.0%
+		displayFolder: Core
+		lineageTag: 11bc6a32-6514-5a0a-b596-2a23b69bfc95
+
+	measure 'Total Revenue' = SUM ( hospital_year[total_revenue] )
+		formatString: "$"#,0,,,"B"
+		displayFolder: Core
+		lineageTag: eea20e2e-cd93-5c47-9d78-4b505ca570f7
+
+	measure 'Losing Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y )
+		formatString: 0%
+		displayFolder: KPI
+		lineageTag: 6ddbc610-a282-5f1f-9d44-b5c05b33ffad
+
+	measure 'Stressed Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Stressed Count], hospital_year[fiscal_year] = _y )
+		formatString: #,0
+		displayFolder: KPI
+		lineageTag: 7814da2a-3e32-5505-8a01-f9796cba4d9a
+
+	measure 'Margin Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Typical Margin], hospital_year[fiscal_year] = _y )
+		formatString: 0.0%
+		displayFolder: KPI
+		lineageTag: a79d7cff-db2e-5d95-9c67-1492f5175bc9
+
+	measure 'Revenue Sel' =
+			VAR _y = [Selected Year]
+			VAR _v = CALCULATE ( [Total Revenue], hospital_year[fiscal_year] = _y )
+			RETURN IF ( _v >= 1e12, FORMAT ( _v / 1e12, "$0.00" ) & "T", IF ( _v >= 1e9, FORMAT ( _v / 1e9, "$0.0" ) & "B", FORMAT ( _v / 1e6, "$0" ) & "M" ) )
+		displayFolder: KPI
+		lineageTag: 79caa7ef-340b-5454-b25d-ae5a929557b6
+
+	measure 'Losing Delta' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y )
+			VAR _p = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y - 1 )
+			VAR _d = ( _c - _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & " pts"
+			RETURN IF ( _y <= 2011, "first year in the data",
+			    IF ( _d < 0, "▼ ", IF ( _d > 0, "▲ ", "● " ) ) & _t & " vs " & ( _y - 1 ) )
+		displayFolder: KPI
+		lineageTag: f9cc8819-bb1d-59f4-8916-93aa6ba9b82c
+
+	measure 'Losing Delta Colour' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y )
+			VAR _p = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y - 1 )
+			VAR _d = ( _c - _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & " pts"
+			RETURN IF ( _y <= 2011, "#8FA5A3", IF ( _d <= 0, "#34D399", "#FF6B6B" ) )
+		displayFolder: KPI
+		lineageTag: 81b6461f-513b-569a-b377-ad275b776db2
+
+	measure 'Stressed Delta' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Stressed Count], hospital_year[fiscal_year] = _y )
+			VAR _p = CALCULATE ( [Stressed Count], hospital_year[fiscal_year] = _y - 1 )
+			VAR _d = _c - _p
+			VAR _t = FORMAT ( ABS ( _d ), "#,0" )
+			RETURN IF ( _y <= 2012, "first year in the data",
+			    IF ( _d < 0, "▼ ", IF ( _d > 0, "▲ ", "● " ) ) & _t & " vs " & ( _y - 1 ) )
+		displayFolder: KPI
+		lineageTag: 45cd3e8a-bbb9-5e2b-848a-175d55480bd6
+
+	measure 'Stressed Delta Colour' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Stressed Count], hospital_year[fiscal_year] = _y )
+			VAR _p = CALCULATE ( [Stressed Count], hospital_year[fiscal_year] = _y - 1 )
+			VAR _d = _c - _p
+			VAR _t = FORMAT ( ABS ( _d ), "#,0" )
+			RETURN IF ( _y <= 2012, "#8FA5A3", IF ( _d <= 0, "#34D399", "#FF6B6B" ) )
+		displayFolder: KPI
+		lineageTag: 64c2003b-f628-586e-b7ab-2d87922fc0cb
+
+	measure 'Margin Delta' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Typical Margin], hospital_year[fiscal_year] = _y )
+			VAR _p = CALCULATE ( [Typical Margin], hospital_year[fiscal_year] = _y - 1 )
+			VAR _d = ( _c - _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & " pts"
+			RETURN IF ( _y <= 2011, "first year in the data",
+			    IF ( _d < 0, "▼ ", IF ( _d > 0, "▲ ", "● " ) ) & _t & " vs " & ( _y - 1 ) )
+		displayFolder: KPI
+		lineageTag: 0540737a-c2af-5024-bd77-c080a04bee06
+
+	measure 'Margin Delta Colour' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Typical Margin], hospital_year[fiscal_year] = _y )
+			VAR _p = CALCULATE ( [Typical Margin], hospital_year[fiscal_year] = _y - 1 )
+			VAR _d = ( _c - _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & " pts"
+			RETURN IF ( _y <= 2011, "#8FA5A3", IF ( _d >= 0, "#34D399", "#FF6B6B" ) )
+		displayFolder: KPI
+		lineageTag: 12335ff8-dd60-5d59-b778-a0a029c0ed59
+
+	measure 'Revenue Delta' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Total Revenue], hospital_year[fiscal_year] = _y )
+			VAR _p = CALCULATE ( [Total Revenue], hospital_year[fiscal_year] = _y - 1 )
+			VAR _d = DIVIDE ( _c - _p, _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & "%"
+			RETURN IF ( _y <= 2011, "first year in the data",
+			    IF ( _d < 0, "▼ ", IF ( _d > 0, "▲ ", "● " ) ) & _t & " vs " & ( _y - 1 ) )
+		displayFolder: KPI
+		lineageTag: f8df68b7-a35c-54ef-8036-628531ed4781
+
+	measure 'Revenue Delta Colour' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Total Revenue], hospital_year[fiscal_year] = _y )
+			VAR _p = CALCULATE ( [Total Revenue], hospital_year[fiscal_year] = _y - 1 )
+			VAR _d = DIVIDE ( _c - _p, _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & "%"
+			RETURN IF ( _y <= 2011, "#8FA5A3", IF ( _d >= 0, "#34D399", "#FF6B6B" ) )
+		displayFolder: KPI
+		lineageTag: ae78ca5d-d98e-5b5e-a9d8-656001b9a491
+
+	measure 'Trend Title' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y )
+			VAR _t = TOPN ( 1, ADDCOLUMNS ( VALUES ( hospital_year[fiscal_year] ), "@v", [Losing Share] ), [@v], DESC )
+			RETURN FORMAT ( _c, "0%" ) & " of hospitals lost money in " & _y & ". The worst year was "
+			    & MAXX ( _t, hospital_year[fiscal_year] ) & " (" & FORMAT ( MAXX ( _t, [@v] ), "0%" ) & ")"
+		displayFolder: Titles
+		lineageTag: 2fc0eb81-4f77-5f1b-a7e0-0c2bac900752
+
+	measure 'Funnel Count' =
+			VAR _y = [Selected Year]
+			RETURN SWITCH ( SELECTEDVALUE ( Stage[order] ),
+			    1, CALCULATE ( COUNTROWS ( hospital_year ), hospital_year[fiscal_year] = _y ),
+			    2, CALCULATE ( SUM ( hospital_year[loss] ), hospital_year[fiscal_year] = _y ),
+			    3, CALCULATE ( COUNTROWS ( hospital_year ), hospital_year[fiscal_year] = _y, hospital_year[loss_streak] >= 2 ),
+			    4, CALCULATE ( COUNTROWS ( hospital_year ), hospital_year[fiscal_year] = _y, hospital_year[loss_streak] >= 3 ) )
+		formatString: #,0
+		displayFolder: Charts
+		lineageTag: 2a030810-1254-576c-813b-8314992e26ae
+
+	measure 'Funnel Title' =
+			VAR _y = [Selected Year]
+			VAR _n = CALCULATE ( COUNTROWS ( hospital_year ), hospital_year[fiscal_year] = _y, hospital_year[loss_streak] >= 3 )
+			RETURN FORMAT ( _n, "#,0" ) & " hospitals had lost money 3+ years in a row by " & _y
+		displayFolder: Titles
+		lineageTag: 4fceae00-3ff2-58fd-97dc-f60f72c01d31
+
+	measure 'Losing Count Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Losing Count], hospital_year[fiscal_year] = _y )
+		formatString: #,0
+		displayFolder: Charts
+		lineageTag: 0a1c7285-89cb-59b2-b14e-52f8c8b5a6d1
+
+	measure 'Donut Title' =
+			VAR _y = [Selected Year]
+			RETURN "Who owns the " & FORMAT ( CALCULATE ( [Losing Count], hospital_year[fiscal_year] = _y ), "#,0" ) & " hospitals that lost money in " & _y
+		displayFolder: Titles
+		lineageTag: 5d20f7b6-9791-52aa-986e-d4be08e3819a
+
+	measure 'Area Colour' = IF ( LEFT ( SELECTEDVALUE ( hospital_year[area_type] ), 5 ) = "Rural", "#FBBF24", "#60A5FA" )
+		displayFolder: Colours
+		lineageTag: 16ed57c9-7f1b-5707-b4f9-2fd864e4a511
+
+	measure 'Area Title' =
+			VAR _y = [Selected Year]
+			VAR _r = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y, hospital_year[rural_urban] = "Rural" )
+			VAR _u = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y, hospital_year[rural_urban] = "Urban" )
+			RETURN "Rural: " & FORMAT ( _r, "0%" ) & " lost money vs " & FORMAT ( _u, "0%" ) & " of urban hospitals (" & _y & ")"
+		displayFolder: Titles
+		lineageTag: ff15b35f-560c-547a-a8e6-9c3d3a2e8543
+
+	measure 'Top 8 Losing' =
+			// ranks every state, whatever else is clicked (REMOVEFILTERS, not ALLSELECTED)
+			VAR _cur = [Losing Sel]
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) )
+			RETURN IF ( HASONEVALUE ( states[state_name] ) && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 8, _cur )
+		formatString: 0%
+		displayFolder: Charts
+		lineageTag: b8a25938-91d1-5859-a452-7990b749e097
+
+	measure 'States Title' =
+			VAR _y = [Selected Year]
+			RETURN "States with the most hospitals losing money, " & _y
+		displayFolder: Titles
+		lineageTag: db37ba80-a8e0-5116-b66b-1e52116c597c
+
+	measure 'Year Colour' = IF ( SELECTEDVALUE ( hospital_year[fiscal_year] ) = [Selected Year], "#FBBF24", "#FF6B6B" )
+		displayFolder: Colours
+		lineageTag: 8015a596-5300-5aee-8e33-d0f9c0b5c1e7
+
+	measure 'Group Stressed Sel' =
+			VAR _y = [Selected Year]
+			VAR _n = CALCULATE ( SUM ( hospital_year[has_prior] ), hospital_year[fiscal_year] = _y )
+			RETURN IF ( _n >= 30 && SELECTEDVALUE ( hospital_year[group_label] ) <> "Unknown", CALCULATE ( [Stressed Share], hospital_year[fiscal_year] = _y ) )
+		formatString: 0%
+		displayFolder: Charts
+		lineageTag: 9feba5ac-8154-5a77-b030-5901bf7a3c8b
+
+	measure 'Group Colour' = IF ( LEFT ( SELECTEDVALUE ( hospital_year[group_label] ), 5 ) = "Rural", "#FBBF24", "#60A5FA" )
+		displayFolder: Colours
+		lineageTag: 1b697664-7d7f-5eac-be4c-78c6040b3908
+
+	measure 'Group Title' =
+			VAR _y = [Selected Year]
+			VAR _t = TOPN ( 1, FILTER ( ADDCOLUMNS ( VALUES ( hospital_year[group_label] ), "@s", [Group Stressed Sel] ),
+			    NOT ISBLANK ( [@s] ) ), [@s], DESC )
+			RETURN MAXX ( _t, hospital_year[group_label] ) & " are the most likely to be stuck in losses: "
+			    & FORMAT ( MAXX ( _t, [@s] ), "0%" ) & " (" & _y & ")"
+		displayFolder: Titles
+		lineageTag: e63c751f-58e0-596a-b5ca-2b472c0fd573
+
+	measure 'Stressed Count Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Stressed Count], hospital_year[fiscal_year] = _y )
+		formatString: #,0
+		displayFolder: Charts
+		lineageTag: 01cf3db2-8771-5e55-8316-88a5e3f040aa
+
+	measure 'Treemap Title' =
+			VAR _y = [Selected Year]
+			RETURN "Where the " & FORMAT ( CALCULATE ( [Stressed Count], hospital_year[fiscal_year] = _y ), "#,0" ) & " hospitals that lost money 2 years running are (" & _y & ")"
+		displayFolder: Titles
+		lineageTag: 6ea90214-57d8-57e3-9e9b-035a91f13ff1
+
+	measure 'Streak Count Sel' =
+			VAR _y = [Selected Year]
+			RETURN IF ( SELECTEDVALUE ( hospital_year[streak_band_order] ) > 0, CALCULATE ( COUNTROWS ( hospital_year ), hospital_year[fiscal_year] = _y ) )
+		formatString: #,0
+		displayFolder: Charts
+		lineageTag: 036f048e-6bfa-5e11-9473-1918c494f3b5
+
+	measure 'Streak Colour' = SWITCH ( SELECTEDVALUE ( hospital_year[streak_band_order] ), 1, "#94A3B8", 2, "#FFA8A8", 3, "#FF6B6B", "#C2413F" )
+		displayFolder: Colours
+		lineageTag: 7661dcb5-ae24-5f9a-9a42-5ced57226adc
+
+	measure 'Streak Title' =
+			VAR _y = [Selected Year]
+			RETURN FORMAT ( CALCULATE ( COUNTROWS ( hospital_year ), hospital_year[fiscal_year] = _y, hospital_year[loss_streak] >= 3 ), "#,0" )
+			    & " hospitals had lost money 3 or more years in a row by " & _y
+		displayFolder: Titles
+		lineageTag: d98cce88-2859-56e1-9b53-cc0547d9754a
+
+	measure 'Fifth Losing Sel' =
+			VAR _y = [Selected Year]
+			RETURN IF ( NOT ISBLANK ( SELECTEDVALUE ( hospital_year[medicaid_fifth] ) ), CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y ) )
+		formatString: 0%
+		displayFolder: Charts
+		lineageTag: af699984-9c87-5307-8ecc-5636b6feeb11
+
+	measure 'Fifth Colour' = IF ( SELECTEDVALUE ( hospital_year[medicaid_fifth] ) = 5, "#FF6B6B", "#35608F" )
+		displayFolder: Colours
+		lineageTag: 060a3a3f-3fe9-59cc-bca6-2d6061b1c304
+
+	measure 'Fifth Title' =
+			VAR _y = [Selected Year]
+			VAR _hi = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y, hospital_year[medicaid_fifth] = 5 )
+			VAR _lo = CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y, hospital_year[medicaid_fifth] = 1 )
+			RETURN "Most Medicaid patients: " & FORMAT ( _hi, "0%" ) & " lost money vs " & FORMAT ( _lo, "0%" ) & " with the fewest (" & _y & ")"
+		displayFolder: Titles
+		lineageTag: 5e413d47-44ba-559d-ab92-482ce040b115
+
+	measure 'State Hospitals Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Hospital Count], hospital_year[fiscal_year] = _y )
+		formatString: #,0
+		displayFolder: States
+		lineageTag: 4e077c12-0a57-5db6-a4f0-2b0468eab5f0
+
+	measure 'State Margin Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Typical Margin], hospital_year[fiscal_year] = _y )
+		formatString: 0.0%
+		displayFolder: States
+		lineageTag: 289b86c0-2fff-5322-b866-ef4d690b683a
+
+	measure 'Top 10 Losing' =
+			VAR _cur = [Losing Sel]
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) )
+			RETURN IF ( HASONEVALUE ( states[state_name] ) && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 10, _cur )
+		formatString: 0%
+		displayFolder: States
+		lineageTag: 55f1fa77-b714-5c86-ba84-acf13baeee24
+
+	measure 'Top 10 Margin' = IF ( NOT ISBLANK ( [Top 10 Losing] ), [State Margin Sel] )
+		formatString: 0.0%
+		displayFolder: States
+		lineageTag: 8bf7c190-6d10-5c16-b86e-6193bff833bb
+
+	measure 'Top 10 Hospitals' = IF ( NOT ISBLANK ( [Top 10 Losing] ), [State Hospitals Sel] )
+		formatString: #,0
+		displayFolder: States
+		lineageTag: 71a711db-4af1-5398-ae7e-ebb1b81a6bfe
+
+	measure 'Worst State' =
+			VAR _t = TOPN ( 1, CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) ), [@r], DESC )
+			RETURN MAXX ( _t, states[state_name] )
+		displayFolder: States
+		lineageTag: 38defaf9-38e6-5327-9469-71aae3a1d6a6
+
+	measure 'Worst State Context' =
+			VAR _y = [Selected Year]
+			VAR _t = TOPN ( 1, CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) ), [@r], DESC )
+			RETURN FORMAT ( MAXX ( _t, [@r] ), "0%" ) & " of its hospitals lost money in " & _y
+		displayFolder: States
+		lineageTag: 0ca18430-c382-53bf-b3a7-fc851c032260
+
+	measure 'Half Losing States' = COUNTROWS ( FILTER ( CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) ), [@r] >= 0.5 ) )
+		formatString: #,0
+		displayFolder: States
+		lineageTag: 28322059-952a-5ab5-bfc6-f959926bc11e
+
+	measure 'Half Losing Context' =
+			VAR _y = [Selected Year]
+			RETURN "of 51 states (with DC) in " & _y
+		displayFolder: States
+		lineageTag: bc5a44b4-2c2f-5aea-b17b-e1dc7d0764db
+
+	measure 'Expanded Losing' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y, hospital_year[medicaid_status] = "Expanded" )
+		formatString: 0%
+		displayFolder: States
+		lineageTag: 91bdc513-4019-5bd8-9310-24254fedb0db
+
+	measure 'Expanded Losing Context' =
+			VAR _y = [Selected Year]
+			RETURN "vs " & FORMAT ( CALCULATE ( [Losing Share], hospital_year[fiscal_year] = _y, hospital_year[medicaid_status] = "Not expanded" ), "0%" ) & " in states that did not expand"
+		displayFolder: States
+		lineageTag: a2f33451-a532-5f10-abd8-9a1dccfc3b98
+
+	measure 'Map Title' =
+			VAR _y = [Selected Year]
+			RETURN "Share of hospitals losing money by state, " & _y
+		displayFolder: Titles
+		lineageTag: 953a7d9f-914e-5f44-bb1a-4fdf3025d3f7
+
+	measure 'Tile Label' = SELECTEDVALUE ( states[state_abbrev] )
+		displayFolder: Map
+		lineageTag: 7d611bb4-6609-50f6-86f5-49b4071fc94d
+
+	measure 'Tile Colour' =
+			VAR _r = [Losing Sel]
+			RETURN SWITCH ( TRUE (),
+			    ISBLANK ( SELECTEDVALUE ( states[state_abbrev] ) ), "#132426",
+			    ISBLANK ( _r ), "#24393B",
+			    _r < 0.20, "#2B4A4C",
+			    _r < 0.30, "#6B4A4C",
+			    _r < 0.40, "#A14F4F",
+			    _r < 0.50, "#C2413F",
+			    "#FF6B6B" )
+		displayFolder: Map
+		lineageTag: aa802ba9-07de-5ac1-a2f9-9f29969da2de
+
+	measure 'Selected State' = SELECTEDVALUE ( states[state_name], "All states" )
+		displayFolder: Tooltip
+		lineageTag: 2646831f-2404-5b8c-bbff-dde4d20bf55b
+
+	measure 'State Status' = SELECTEDVALUE ( states[medicaid_status] ) & " Medicaid"
+		displayFolder: Tooltip
+		lineageTag: d5751126-49e1-5be4-b40f-ff2ed158b6c3
+
+	measure 'State Rank Text' =
+			VAR _y = [Selected Year]
+			VAR _cur = [Losing Sel]
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) )
+			RETURN IF ( HASONEVALUE ( states[state_name] ), "#" & COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) + 1 & " of 51 for share losing money in " & _y )
+		displayFolder: Tooltip
+		lineageTag: ddfa44c2-9f71-59c8-a150-82a92b9beefc
+
+	measure 'Selection Text' =
+			VAR _f =
+			    IF ( ISFILTERED ( hospital_year[hospital_type] ), "  ·  " & CONCATENATEX ( VALUES ( hospital_year[hospital_type] ), hospital_year[hospital_type], ", " ) )
+			    & IF ( ISFILTERED ( hospital_year[ownership] ), "  ·  " & CONCATENATEX ( VALUES ( hospital_year[ownership] ), hospital_year[ownership], ", " ) )
+			    & IF ( ISFILTERED ( hospital_year[rural_urban] ), "  ·  " & CONCATENATEX ( VALUES ( hospital_year[rural_urban] ), hospital_year[rural_urban], ", " ) )
+			    & IF ( ISFILTERED ( states[state_name] ), "  ·  " & CONCATENATEX ( VALUES ( states[state_name] ), states[state_name], ", " ) )
+			RETURN "Showing " & [Selected Year] & IF ( _f = "", "  ·  all US hospitals", _f )
+		displayFolder: Core
+		lineageTag: 72072199-9b1c-5b86-9a20-1ea7de299e4a
+
+	column area_type =
+			hospital_year[rural_urban] & IF ( hospital_year[hospital_type] = "General hospital", " general", " critical access" )
+		dataType: string
+		lineageTag: b3502dea-0e66-5c81-a7a6-24f2c79ed496
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column streak_band_order =
+			SWITCH ( TRUE (), hospital_year[loss_streak] = 0, 0, hospital_year[loss_streak] = 1, 1, hospital_year[loss_streak] = 2, 2,
+			    hospital_year[loss_streak] <= 4, 3, 4 )
+		dataType: int64
+		isHidden
+		lineageTag: 5eb26bc6-72a2-53f4-bfa2-b778695a87ed
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column streak_band =
+			SWITCH ( hospital_year[streak_band_order], 0, "No loss", 1, "1 year", 2, "2 years", 3, "3-4 years", "5+ years" )
+		dataType: string
+		sortByColumn: streak_band_order
+		lineageTag: b4ac5fd8-0611-58d3-9c0d-d7666d24465e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column ccn
+		dataType: string
+		isHidden
+		lineageTag: ecd38454-2177-5d0c-beb3-abae1ec0724b
+		summarizeBy: none
+		sourceColumn: ccn
+
+		annotation SummarizationSetBy = Automatic
+
+	column fiscal_year
+		dataType: int64
+		formatString: 0
+		lineageTag: 69d1966c-5caf-5da2-83d0-8397d33bd03c
+		summarizeBy: none
+		sourceColumn: fiscal_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_abbrev
+		dataType: string
+		lineageTag: 40056e85-87ea-5b58-86a1-7f60ac825650
+		summarizeBy: none
+		sourceColumn: state_abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column hospital_type
+		dataType: string
+		lineageTag: 325c9010-2454-56d5-a129-cb411f7105bc
+		summarizeBy: none
+		sourceColumn: hospital_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column ownership
+		dataType: string
+		lineageTag: 741f1974-71ca-5876-82b4-b188cbb9869e
+		summarizeBy: none
+		sourceColumn: ownership
+
+		annotation SummarizationSetBy = Automatic
+
+	column rural_urban
+		dataType: string
+		lineageTag: b874c2a8-7a79-5ec1-9ab9-8dc4c7e6bc33
+		summarizeBy: none
+		sourceColumn: rural_urban
+
+		annotation SummarizationSetBy = Automatic
+
+	column medicaid_status
+		dataType: string
+		lineageTag: 490f42c6-5f36-571b-a6bb-894fcd331b87
+		summarizeBy: none
+		sourceColumn: medicaid_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_revenue
+		dataType: double
+		formatString: #,0.00
+		lineageTag: fb57acf4-86c2-595e-a14f-75a4b1e0043e
+		summarizeBy: sum
+		sourceColumn: total_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column net_income
+		dataType: double
+		formatString: #,0.00
+		lineageTag: c9bff2d5-5eeb-5248-956a-d4468cfe163d
+		summarizeBy: sum
+		sourceColumn: net_income
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_margin
+		dataType: double
+		formatString: #,0.00
+		lineageTag: f1b479b3-0bd1-5018-94e2-cbfbf909273b
+		summarizeBy: sum
+		sourceColumn: total_margin
+
+		annotation SummarizationSetBy = Automatic
+
+	column loss
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 289f6dc7-3cae-5c4f-a6c1-b2c0572382d0
+		summarizeBy: sum
+		sourceColumn: loss
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_prior
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 34cefc23-0965-51ba-bc52-8d30f7442d55
+		summarizeBy: sum
+		sourceColumn: has_prior
+
+		annotation SummarizationSetBy = Automatic
+
+	column stressed
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: faa2a91b-f5c2-52e1-acb6-8480489b06f2
+		summarizeBy: sum
+		sourceColumn: stressed
+
+		annotation SummarizationSetBy = Automatic
+
+	column group_label
+		dataType: string
+		lineageTag: db3332dc-999f-5c52-827c-e753ad2555a8
+		summarizeBy: none
+		sourceColumn: group_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column loss_streak
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 957ec14c-1e81-5a4a-91f8-963a361e6f79
+		summarizeBy: none
+		sourceColumn: loss_streak
+
+		annotation SummarizationSetBy = Automatic
+
+	column medicaid_fifth
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 2210fc1d-af06-528a-b8cd-6f6df11442af
+		summarizeBy: none
+		sourceColumn: medicaid_fifth
+
+		annotation SummarizationSetBy = Automatic
+
+	column medicaid_fifth_label
+		dataType: string
+		sortByColumn: medicaid_fifth
+		lineageTag: 942cbe47-289e-5b1d-b9c0-c3df408e4f83
+		summarizeBy: none
+		sourceColumn: medicaid_fifth_label
+
+		annotation SummarizationSetBy = Automatic
+
+	partition hospital_year = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "hospital_year.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"ccn", type text}, {"fiscal_year", Int64.Type}, {"state_abbrev", type text}, {"hospital_type", type text}, {"ownership", type text}, {"rural_urban", type text}, {"medicaid_status", type text}, {"total_revenue", type number}, {"net_income", type number}, {"total_margin", type number}, {"loss", Int64.Type}, {"has_prior", Int64.Type}, {"stressed", Int64.Type}, {"group_label", type text}, {"loss_streak", Int64.Type}, {"medicaid_fifth", Int64.Type}, {"medicaid_fifth_label", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

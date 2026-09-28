@@ -1,0 +1,66 @@
+table unpaid_care
+	lineageTag: df86e3e1-666f-509b-a702-3612307dfafe
+
+	measure 'Unpaid Care Share' = AVERAGE ( unpaid_care[unpaid_care_share] )
+		formatString: 0.0%
+		displayFolder: States
+		lineageTag: 6ad7efe9-8be2-53ce-bf61-461715779a0a
+
+	measure 'Unpaid Not Expanded' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Unpaid Care Share], unpaid_care[fiscal_year] = _y, unpaid_care[medicaid_status] = "Not expanded" )
+		formatString: 0.0%
+		displayFolder: States
+		lineageTag: ed47a941-acb1-5cc7-a72b-a6d4a3e370b4
+
+	measure 'Unpaid Context' =
+			VAR _y = [Selected Year]
+			RETURN "vs " & FORMAT ( CALCULATE ( [Unpaid Care Share], unpaid_care[fiscal_year] = _y, unpaid_care[medicaid_status] = "Expanded" ), "0.0%" ) & " where Medicaid expanded"
+		displayFolder: States
+		lineageTag: 5a051159-bb68-5eeb-a3d7-bd33067d42b2
+
+	measure 'Unpaid Title' =
+			VAR _y = [Selected Year]
+			VAR _e = CALCULATE ( [Unpaid Care Share], unpaid_care[fiscal_year] = _y, unpaid_care[medicaid_status] = "Expanded" )
+			VAR _n = CALCULATE ( [Unpaid Care Share], unpaid_care[fiscal_year] = _y, unpaid_care[medicaid_status] = "Not expanded" )
+			RETURN "Unpaid care: " & FORMAT ( _e, "0.0%" ) & " of costs where Medicaid expanded vs " & FORMAT ( _n, "0.0%" ) & " elsewhere (" & _y & ")"
+		displayFolder: Titles
+		lineageTag: 0eabd319-0a1f-5dc4-97a4-45bbdbaf3954
+
+	column fiscal_year
+		dataType: int64
+		formatString: 0
+		lineageTag: cfd34ae9-b2a4-53f1-b8ac-5fc6169753ba
+		summarizeBy: none
+		sourceColumn: fiscal_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column medicaid_status
+		dataType: string
+		lineageTag: d7a42f6d-ab9c-5f2a-9359-a7f914fc4ccc
+		summarizeBy: none
+		sourceColumn: medicaid_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column unpaid_care_share
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 8a99bec9-7631-5f9b-a7b3-bf1dee7f5dd6
+		summarizeBy: sum
+		sourceColumn: unpaid_care_share
+
+		annotation SummarizationSetBy = Automatic
+
+	partition unpaid_care = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "unpaid_care.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"fiscal_year", Int64.Type}, {"medicaid_status", type text}, {"unpaid_care_share", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

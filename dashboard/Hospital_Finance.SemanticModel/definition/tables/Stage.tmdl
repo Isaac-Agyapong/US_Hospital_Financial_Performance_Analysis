@@ -1,0 +1,29 @@
+table Stage
+	lineageTag: cceac4bb-9fd7-5ab3-90a5-867f6d71a437
+
+	column order
+		dataType: int64
+		isHidden
+		lineageTag: 405fe469-8e44-59af-9f83-b485593e8c20
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [order]
+
+		annotation SummarizationSetBy = Automatic
+
+	column stage
+		dataType: string
+		sortByColumn: order
+		lineageTag: e5bd0bf1-5f98-517f-a92c-d25892526eeb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [stage]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Stage = calculated
+		mode: import
+		source =
+				DATATABLE ( "order", INTEGER, "stage", STRING, {
+				    { 1, "All hospitals" }, { 2, "Lost money this year" },
+				    { 3, "Lost money 2 years in a row" }, { 4, "Lost money 3+ years in a row" } } )

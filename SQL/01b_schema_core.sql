@@ -24,7 +24,7 @@ CREATE TABLE core.dim_hospital (
     city             text,
     county           text,
     state_abbrev     char(2) NOT NULL REFERENCES core.dim_state,
-    rural_urban      text,               -- 'Rural' / 'Urban' (latest report)
+    rural_urban      text,               -- 'Rural' / 'Urban' by location (CBSA), latest report
     hospital_type    text NOT NULL,      -- 'General acute care' / 'Critical access' / other
     ownership        text NOT NULL,      -- 'Nonprofit' / 'For-profit' / 'Government'
     beds_latest      integer,
@@ -42,7 +42,8 @@ CREATE TABLE core.fact_hospital_year (
     period_days               smallint NOT NULL,
     reports_in_year           smallint NOT NULL,   -- >1 when a hospital filed more than one report that year
     ownership                 text NOT NULL,       -- ownership at the time of this report
-    rural_urban               text,
+    rural_urban               text,      -- by location: CBSA 999xx = rural
+    paid_as_rural_in_city     boolean NOT NULL,  -- city hospital reclassified as rural for Medicare payment
     beds                      integer,
     fte_employees             numeric,
     discharges                numeric,

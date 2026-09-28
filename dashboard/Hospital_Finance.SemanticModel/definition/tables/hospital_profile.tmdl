@@ -1,0 +1,297 @@
+table hospital_profile
+	lineageTag: cccdb2d4-96ab-5c55-8680-270be4925ac2
+
+	measure 'Profile Name' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), SELECTEDVALUE ( hospital_profile[hospital_name] ), "Pick a hospital" )
+		displayFolder: Hospital
+		lineageTag: 3062ecc4-a1ab-51dd-bdda-c1d78fbf4ae3
+
+	measure 'Profile Facts' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), SELECTEDVALUE ( hospital_profile[hospital_type] ) & "   ·   " & SELECTEDVALUE ( hospital_profile[ownership] ) & "   ·   " & SELECTEDVALUE ( hospital_profile[rural_urban] ) & "   ·   " & SELECTEDVALUE ( hospital_profile[city] ) & ", " & SELECTEDVALUE ( hospital_profile[state_name] ) & "   ·   " & FORMAT ( SUM ( hospital_profile[beds] ), "#,0" ) & " beds", "Type a hospital name in the search box on the left" )
+		displayFolder: Hospital
+		lineageTag: 869ca7c0-9bf4-5e62-8450-aed0d2af379f
+
+	measure 'Profile Margin' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), SUM ( hospital_profile[last_margin] ) )
+		formatString: 0.0%
+		displayFolder: Hospital
+		lineageTag: e0cbd936-6fec-5e47-a9f6-30b32e341aa7
+
+	measure 'Profile Margin Context' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), "in " & MAX ( hospital_profile[last_year] ) & "  ·  US typical " & FORMAT ( MAX ( hospital_profile[us_median_margin] ), "0.0%" ) )
+		displayFolder: Hospital
+		lineageTag: fbfe01ce-0e5a-5ed2-a90e-ae88c37e98e6
+
+	measure 'Profile Margin Colour' = IF ( [Profile Margin] < 0, "#FF6B6B", "#34D399" )
+		displayFolder: Hospital
+		lineageTag: 63b8c553-5d25-5925-a09e-78369572b57d
+
+	measure 'Profile Result' =
+			VAR _n = SUM ( hospital_profile[last_net_income] )
+			VAR _m = ABS ( _n )
+			VAR _t = "$" & IF ( _m >= 1e9, FORMAT ( _m / 1e9, "0.0" ) & "B", IF ( _m >= 1e6, FORMAT ( _m / 1e6, "0.0" ) & "M", FORMAT ( _m / 1e3, "0" ) & "K" ) )
+			RETURN IF ( HASONEVALUE ( hospital_profile[hospital_label] ), IF ( _n < 0, "Lost ", "Made " ) & _t )
+		displayFolder: Hospital
+		lineageTag: 0f9e1434-2151-5745-a04b-7ae034177f57
+
+	measure 'Profile Result Context' =
+			VAR _r = SUM ( hospital_profile[last_revenue] )
+			RETURN IF ( HASONEVALUE ( hospital_profile[hospital_label] ), "on $" & IF ( _r >= 1e9, FORMAT ( _r / 1e9, "0.0" ) & "B", FORMAT ( _r / 1e6, "0" ) & "M" ) & " of revenue in " & MAX ( hospital_profile[last_year] ) )
+		displayFolder: Hospital
+		lineageTag: 01076b91-c695-5106-b8a1-ffff900e09da
+
+	measure 'Profile Streak' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), SUM ( hospital_profile[loss_years] ) )
+		formatString: 0
+		displayFolder: Hospital
+		lineageTag: 533cd11f-920b-51d8-883e-e88be24bd625
+
+	measure 'Profile Streak Context' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), IF ( SUM ( hospital_profile[loss_years] ) = 0, "made money in its latest year", "losing money up to " & MAX ( hospital_profile[last_year] ) ) )
+		displayFolder: Hospital
+		lineageTag: ffa1953a-6b03-5771-934d-de546ccecb13
+
+	measure 'Profile Streak Colour' = IF ( SUM ( hospital_profile[loss_years] ) >= 2, "#FF6B6B", "#34D399" )
+		displayFolder: Hospital
+		lineageTag: 0241ff52-2365-5e87-83d5-82014a53693b
+
+	measure 'Profile Rank' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), "#" & SUM ( hospital_profile[state_rank] ) & " of " & SUM ( hospital_profile[state_peers] ) )
+		displayFolder: Hospital
+		lineageTag: 74ee331b-c818-5d5c-85e7-820873708553
+
+	measure 'Profile Rank Context' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), "in " & SELECTEDVALUE ( hospital_profile[state_name] ) & " by profit margin" )
+		displayFolder: Hospital
+		lineageTag: 5f1c0050-2c86-58b5-b33b-90d1f805990f
+
+	measure 'Hospital Margin' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), AVERAGE ( hospital_year[total_margin] ) )
+		formatString: 0.0%
+		displayFolder: Hospital
+		lineageTag: c9a4cbf6-b2e6-5503-8951-2502378ca866
+
+	measure 'Hospital Margin Colour' = IF ( [Hospital Margin] < 0, "#FF6B6B", "#34D399" )
+		displayFolder: Colours
+		lineageTag: 6ba0f2ff-dccc-588a-9e5f-d144d48abc52
+
+	measure 'State Typical Margin' = IF ( HASONEVALUE ( hospital_profile[hospital_label] ), SUM ( hospital_profile[state_median_margin] ) )
+		formatString: 0.0%
+		displayFolder: Hospital
+		lineageTag: 295fbf12-e415-5410-952b-ffced975a675
+
+	measure 'Gauge Min' = -0.2
+		formatString: 0%
+		displayFolder: Hospital
+		lineageTag: cf235b8c-983d-53ab-a9ba-01f4e98a8eeb
+
+	measure 'Gauge Max' = 0.3
+		formatString: 0%
+		displayFolder: Hospital
+		lineageTag: 8815747e-1874-5ad7-8305-efa700e0c51a
+
+	measure 'Profile Sentence' =
+			VAR _m = SUM ( hospital_profile[last_margin] )
+			VAR _s = SUM ( hospital_profile[state_median_margin] )
+			VAR _k = SUM ( hospital_profile[loss_years] )
+			RETURN IF ( HASONEVALUE ( hospital_profile[hospital_label] ),
+			    "In " & MAX ( hospital_profile[last_year] ) & ", this hospital " & IF ( _m < 0, "lost ", "kept " ) & FORMAT ( ABS ( _m ) * 100, "0.0" )
+			        & " cents on every dollar it took in" & IF ( _m < 0, "", " as profit" ) & ". That is "
+			        & IF ( _m > _s + 0.005, "better than", IF ( _m < _s - 0.005, "worse than", "about the same as" ) )
+			        & " the typical hospital in " & SELECTEDVALUE ( hospital_profile[state_name] ) & " (" & FORMAT ( _s * 100, "0.0" ) & " cents). "
+			        & SWITCH ( TRUE (), _k >= 3, "It has lost money " & _k & " years in a row: a sign of lasting financial stress.",
+			                            _k = 2, "It has lost money two years in a row, which this report counts as financial stress.",
+			                            _k = 1, "It lost money in its latest year only.",
+			                            "It made money in its latest year." ),
+			    "Pick a hospital in the search box to see what its numbers mean." )
+		displayFolder: Hospital
+		lineageTag: 826e0dc0-8b11-57e5-99d1-6d73e5b09b10
+
+	column ccn
+		dataType: string
+		isHidden
+		lineageTag: 134b5aab-084e-56e3-92ce-04eb1663beb8
+		summarizeBy: none
+		sourceColumn: ccn
+
+		annotation SummarizationSetBy = Automatic
+
+	column hospital_name
+		dataType: string
+		lineageTag: fb8d1cd5-b204-52f2-a669-3488f1af211d
+		summarizeBy: none
+		sourceColumn: hospital_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column city
+		dataType: string
+		lineageTag: 170fbb34-c133-506e-9b63-d5a88c633b1c
+		summarizeBy: none
+		sourceColumn: city
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_abbrev
+		dataType: string
+		lineageTag: bbab88c7-d96a-55f1-a3f4-eaa6de16ce99
+		summarizeBy: none
+		sourceColumn: state_abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_name
+		dataType: string
+		lineageTag: 02bdef42-6dc7-591b-9077-f1d652b023d4
+		summarizeBy: none
+		sourceColumn: state_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column hospital_type
+		dataType: string
+		lineageTag: 8bf44c79-1c97-559e-bf98-3aa30ce71dc6
+		summarizeBy: none
+		sourceColumn: hospital_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column ownership
+		dataType: string
+		lineageTag: 8efca3fb-6910-5dc6-88bd-111e740689ee
+		summarizeBy: none
+		sourceColumn: ownership
+
+		annotation SummarizationSetBy = Automatic
+
+	column rural_urban
+		dataType: string
+		lineageTag: 6b8178de-53b0-5fca-a033-4499119bc0fd
+		summarizeBy: none
+		sourceColumn: rural_urban
+
+		annotation SummarizationSetBy = Automatic
+
+	column beds
+		dataType: int64
+		formatString: 0
+		lineageTag: a4d70002-fd8c-5c9b-a7da-6f97fd7d19a1
+		summarizeBy: none
+		sourceColumn: beds
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_year
+		dataType: int64
+		formatString: 0
+		lineageTag: e8ecc06c-2289-59e7-82f0-fa2035f20501
+		summarizeBy: none
+		sourceColumn: last_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_margin
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 53807416-2204-505a-a936-b70e9b34077a
+		summarizeBy: sum
+		sourceColumn: last_margin
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_net_income
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 200b7959-9ef0-5f51-9cef-d5cf8dc3fdb4
+		summarizeBy: sum
+		sourceColumn: last_net_income
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_revenue
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 694f5f25-9b2c-5a31-a7b0-72e134597393
+		summarizeBy: sum
+		sourceColumn: last_revenue
+
+		annotation SummarizationSetBy = Automatic
+
+	column loss_years
+		dataType: int64
+		formatString: 0
+		lineageTag: 4c189632-ee96-549c-af23-a3ea55319d63
+		summarizeBy: none
+		sourceColumn: loss_years
+
+		annotation SummarizationSetBy = Automatic
+
+	column loss_band
+		dataType: string
+		sortByColumn: loss_band_order
+		lineageTag: 5f6608e6-42c1-556b-a811-56610262f971
+		summarizeBy: none
+		sourceColumn: loss_band
+
+		annotation SummarizationSetBy = Automatic
+
+	column loss_band_order
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 4455ae1a-cf60-5063-b93a-f8de21c449ee
+		summarizeBy: none
+		sourceColumn: loss_band_order
+
+		annotation SummarizationSetBy = Automatic
+
+	column hospital_label
+		dataType: string
+		lineageTag: 76c8a018-88bb-52f7-947e-3ce3d26e4995
+		summarizeBy: none
+		sourceColumn: hospital_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_rank
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: d15afebe-39b3-5e27-9642-29ec32e6370e
+		summarizeBy: none
+		sourceColumn: state_rank
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_peers
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 64350677-7b63-5e0e-be38-edd040b45dee
+		summarizeBy: sum
+		sourceColumn: state_peers
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_median_margin
+		dataType: double
+		formatString: #,0.00
+		isHidden
+		lineageTag: 7ed13d7c-5c37-57fd-aa31-f43d522ae1f4
+		summarizeBy: sum
+		sourceColumn: state_median_margin
+
+		annotation SummarizationSetBy = Automatic
+
+	column us_median_margin
+		dataType: double
+		formatString: #,0.00
+		isHidden
+		lineageTag: adcaa9bb-fa80-5d22-be02-a53ce9246fd6
+		summarizeBy: sum
+		sourceColumn: us_median_margin
+
+		annotation SummarizationSetBy = Automatic
+
+	partition hospital_profile = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "hospital_profile.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"ccn", type text}, {"hospital_name", type text}, {"city", type text}, {"state_abbrev", type text}, {"state_name", type text}, {"hospital_type", type text}, {"ownership", type text}, {"rural_urban", type text}, {"beds", Int64.Type}, {"last_year", Int64.Type}, {"last_margin", type number}, {"last_net_income", type number}, {"last_revenue", type number}, {"loss_years", Int64.Type}, {"loss_band", type text}, {"loss_band_order", Int64.Type}, {"hospital_label", type text}, {"state_rank", Int64.Type}, {"state_peers", Int64.Type}, {"state_median_margin", type number}, {"us_median_margin", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

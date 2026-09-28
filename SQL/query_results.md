@@ -161,7 +161,33 @@ GROUP BY ownership ORDER BY median_days_cash;
 | Nonprofit   |        2559 |                   41.30 |              11.00 |
 | Government  |         921 |                   13.20 |              64.00 |
 
-### Q10: Medicare inpatient file matches cost-report hospitals (CCN join coverage)
+### Q10: The cost report's rural flag is a payment status, not a location. City hospitals can ask Medicare to pay
+
+```sql
+SELECT fiscal_year,
+       count(*) FILTER (WHERE f.rural_urban = 'Rural') AS rural_by_location,
+       count(*) FILTER (WHERE f.paid_as_rural_in_city) AS city_hospitals_paid_as_rural
+FROM core.fact_hospital_year f JOIN core.dim_hospital h USING (ccn)
+WHERE h.in_study GROUP BY fiscal_year ORDER BY fiscal_year;
+```
+
+|   fiscal_year |   rural_by_location |   city_hospitals_paid_as_rural |
+|--------------:|--------------------:|-------------------------------:|
+|          2011 |                1919 |                            294 |
+|          2012 |                1911 |                            304 |
+|          2013 |                1936 |                            299 |
+|          2014 |                1911 |                            312 |
+|          2015 |                1894 |                            261 |
+|          2016 |                1890 |                            250 |
+|          2017 |                1856 |                            341 |
+|          2018 |                1828 |                            396 |
+|          2019 |                1819 |                            461 |
+|          2020 |                1822 |                            582 |
+|          2021 |                1820 |                            626 |
+|          2022 |                1824 |                            660 |
+|          2023 |                1791 |                            732 |
+
+### Q11: Medicare inpatient file matches cost-report hospitals (CCN join coverage)
 
 ```sql
 SELECT i.data_year, count(*) AS inpatient_hospitals,
@@ -268,8 +294,8 @@ FROM analytics.v_rural_urban WHERE fiscal_year = 2023 ORDER BY rural_urban;
 
 | rural_urban   |   hospitals |   median_margin_pct |   pct_losing_money |
 |:--------------|------------:|--------------------:|-------------------:|
-| Rural         |        2449 |                3.70 |              33.70 |
-| Urban         |        1881 |                5.20 |              30.40 |
+| Rural         |        1748 |                3.40 |              36.00 |
+| Urban         |        2582 |                5.10 |              29.70 |
 
 ### Q5: Did Medicaid expansion reduce hospitals' unpaid care? Uncompensated care as % of costs
 
@@ -329,16 +355,17 @@ FROM analytics.v_financial_stress WHERE fiscal_year = 2023 AND hospitals >= 30 O
 
 | hospital_type      | rural_urban   | ownership   |   hospitals |   stressed |   stressed_pct |
 |:-------------------|:--------------|:------------|------------:|-----------:|---------------:|
-| General acute care | Rural         | Government  |         227 |         71 |          31.30 |
-| General acute care | Rural         | Nonprofit   |         803 |        226 |          28.10 |
-| General acute care | Urban         | Government  |         177 |         47 |          26.60 |
-| General acute care | Urban         | Nonprofit   |        1082 |        276 |          25.50 |
-| Critical access    | Rural         | Government  |         483 |        119 |          24.60 |
-| Critical access    | Rural         | For-profit  |          43 |         10 |          23.30 |
-| General acute care | Urban         | For-profit  |         480 |         99 |          20.60 |
-| General acute care | Rural         | For-profit  |         179 |         36 |          20.10 |
-| Critical access    | Urban         | Nonprofit   |          68 |         13 |          19.10 |
-| Critical access    | Rural         | Nonprofit   |         669 |        104 |          15.50 |
+| General acute care | Rural         | Government  |         156 |         59 |          37.80 |
+| General acute care | Rural         | Nonprofit   |         392 |        115 |          29.30 |
+| General acute care | Urban         | Nonprofit   |        1493 |        387 |          25.90 |
+| Critical access    | Rural         | Government  |         438 |        113 |          25.80 |
+| General acute care | Urban         | Government  |         248 |         59 |          23.80 |
+| Critical access    | Rural         | For-profit  |          37 |          8 |          21.60 |
+| General acute care | Rural         | For-profit  |         112 |         23 |          20.50 |
+| General acute care | Urban         | For-profit  |         547 |        112 |          20.50 |
+| Critical access    | Urban         | Government  |          73 |         13 |          17.80 |
+| Critical access    | Urban         | Nonprofit   |         161 |         27 |          16.80 |
+| Critical access    | Rural         | Nonprofit   |         576 |         90 |          15.60 |
 
 ### Q8: Cost pressure: cost per discharge and contract (agency) labor, general acute care
 
@@ -418,19 +445,19 @@ FROM analytics.v_loss_streaks GROUP BY years_in_a_row ORDER BY years_in_a_row;
 
 |   years_in_a_row |   hospitals |   rural |
 |-----------------:|------------:|--------:|
-|                1 |         388 |     260 |
-|                2 |         505 |     328 |
-|                3 |         231 |     123 |
-|                4 |          68 |      31 |
-|                5 |          49 |      27 |
-|                6 |          28 |      10 |
+|                1 |         388 |     221 |
+|                2 |         505 |     248 |
+|                3 |         231 |      84 |
+|                4 |          68 |      16 |
+|                5 |          49 |      19 |
+|                6 |          28 |       6 |
 |                7 |          21 |       5 |
-|                8 |          32 |      10 |
-|                9 |          21 |       8 |
-|               10 |          12 |       4 |
-|               11 |           9 |       4 |
+|                8 |          32 |       7 |
+|                9 |          21 |       5 |
+|               10 |          12 |       2 |
+|               11 |           9 |       2 |
 |               12 |           7 |       0 |
-|               13 |          26 |      16 |
+|               13 |          26 |      14 |
 
 ### Q12: Do hospitals with more Medicaid patients earn less? (correlation and slope, 2023)
 

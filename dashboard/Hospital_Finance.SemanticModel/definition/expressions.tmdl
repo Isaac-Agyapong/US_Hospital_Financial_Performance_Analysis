@@ -1,0 +1,4 @@
+expression DataFolder = "D:\Projects\US_Hospital_Financial_Performance_Analysis\dashboard\data\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 208f9a49-9719-5b9c-be8b-943b6f29ab41
+
+	annotation PBI_ResultType = Text

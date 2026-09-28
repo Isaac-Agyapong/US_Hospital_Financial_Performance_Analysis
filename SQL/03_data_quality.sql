@@ -76,7 +76,16 @@ SELECT ownership, count(*) AS hospitals,
 FROM analytics.v_hospital_year WHERE fiscal_year = 2023 AND days_cash_on_hand IS NOT NULL
 GROUP BY ownership ORDER BY median_days_cash;
 
--- Q10: Medicare inpatient file matches cost-report hospitals (CCN join coverage)
+-- Q10: The cost report's rural flag is a payment status, not a location. City hospitals can ask Medicare to pay
+--      them as rural (42 CFR 412.103); the number doing so more than doubled after 2018. This project defines rural
+--      by location (CBSA 999xx), which stays steady at about 1,900 hospitals a year.
+SELECT fiscal_year,
+       count(*) FILTER (WHERE f.rural_urban = 'Rural') AS rural_by_location,
+       count(*) FILTER (WHERE f.paid_as_rural_in_city) AS city_hospitals_paid_as_rural
+FROM core.fact_hospital_year f JOIN core.dim_hospital h USING (ccn)
+WHERE h.in_study GROUP BY fiscal_year ORDER BY fiscal_year;
+
+-- Q11: Medicare inpatient file matches cost-report hospitals (CCN join coverage)
 SELECT i.data_year, count(*) AS inpatient_hospitals,
        count(*) FILTER (WHERE h.ccn IS NOT NULL) AS matched_to_cost_reports,
        round(100.0 * count(*) FILTER (WHERE h.ccn IS NOT NULL) / count(*), 1) AS match_pct

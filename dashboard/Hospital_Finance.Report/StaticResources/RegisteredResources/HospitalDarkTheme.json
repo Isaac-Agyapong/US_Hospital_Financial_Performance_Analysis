@@ -1,0 +1,32 @@
+{
+  "name": "Hospital Dark",
+  "dataColors": [
+    "#60A5FA",
+    "#FF6B6B",
+    "#34D399",
+    "#FBBF24",
+    "#A78BFA",
+    "#94A3B8",
+    "#A5CBFB",
+    "#FFA8A8"
+  ],
+  "foreground": "#EEF4F3",
+  "foregroundNeutralSecondary": "#8FA5A3",
+  "background": "#132426",
+  "backgroundLight": "#1B3033",
+  "tableAccent": "#34D399",
+  "textClasses": {
+    "title": {
+      "fontFace": "Segoe UI Semibold",
+      "color": "#EEF4F3"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "color": "#8FA5A3"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Semibold",
+      "color": "#EEF4F3"
+    }
+  }
+}

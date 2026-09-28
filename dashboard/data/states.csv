@@ -1,0 +1,52 @@
+state_abbrev,state_name,medicaid_status,tile_x,tile_y
+AK,Alaska,Expanded,0,0
+AL,Alabama,Not expanded,6,6
+AR,Arkansas,Expanded,4,5
+AZ,Arizona,Expanded,1,5
+CA,California,Expanded,0,4
+CO,Colorado,Expanded,2,4
+CT,Connecticut,Expanded,9,3
+DC,District of Columbia,Expanded,8,5
+DE,Delaware,Expanded,9,4
+FL,Florida,Not expanded,8,7
+GA,Georgia,Not expanded,7,6
+HI,Hawaii,Expanded,0,7
+IA,Iowa,Expanded,4,3
+ID,Idaho,Expanded,1,2
+IL,Illinois,Expanded,5,2
+IN,Indiana,Expanded,5,3
+KS,Kansas,Not expanded,3,5
+KY,Kentucky,Expanded,5,4
+LA,Louisiana,Expanded,4,6
+MA,Massachusetts,Expanded,9,2
+MD,Maryland,Expanded,8,4
+ME,Maine,Expanded,10,0
+MI,Michigan,Expanded,6,2
+MN,Minnesota,Expanded,4,2
+MO,Missouri,Expanded,4,4
+MS,Mississippi,Not expanded,5,6
+MT,Montana,Expanded,2,2
+NC,North Carolina,Expanded,6,5
+ND,North Dakota,Expanded,3,2
+NE,Nebraska,Expanded,3,4
+NH,New Hampshire,Expanded,10,1
+NJ,New Jersey,Expanded,8,3
+NM,New Mexico,Expanded,2,5
+NV,Nevada,Expanded,1,3
+NY,New York,Expanded,8,2
+OH,Ohio,Expanded,6,3
+OK,Oklahoma,Expanded,3,6
+OR,Oregon,Expanded,0,3
+PA,Pennsylvania,Expanded,7,3
+RI,Rhode Island,Expanded,10,3
+SC,South Carolina,Not expanded,7,5
+SD,South Dakota,Expanded,3,3
+TN,Tennessee,Not expanded,5,5
+TX,Texas,Not expanded,3,7
+UT,Utah,Expanded,1,4
+VA,Virginia,Expanded,7,4
+VT,Vermont,Expanded,9,1
+WA,Washington,Expanded,0,2
+WI,Wisconsin,Not expanded,5,1
+WV,West Virginia,Expanded,6,4
+WY,Wyoming,Not expanded,2,3

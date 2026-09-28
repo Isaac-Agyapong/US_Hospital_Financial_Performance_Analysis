@@ -1,0 +1,209 @@
+table cost_trend
+	lineageTag: f4a50ba7-8e2a-53cc-8178-ed03b9758faa
+
+	measure 'Cost per Stay' = SUM ( cost_trend[cost_per_stay] )
+		formatString: "$"#,0
+		displayFolder: Costs
+		lineageTag: 509f7133-3712-51ac-a1cb-a34bf17d48a7
+
+	measure 'Agency Staff Share' = SUM ( cost_trend[agency_staff_share] )
+		formatString: 0.0%
+		displayFolder: Costs
+		lineageTag: 8935d49b-043d-5b97-a0cc-725e090ea138
+
+	measure Markup = SUM ( cost_trend[charge_to_cost] )
+		formatString: 0.0"x"
+		displayFolder: Costs
+		lineageTag: 340b405f-d0b2-5ee6-853d-669d19eb0827
+
+	measure 'Billed per Dollar' = SUM ( cost_trend[us_billed_per_dollar] )
+		formatString: "$"0.00
+		displayFolder: Costs
+		lineageTag: 08976c83-7e6d-51e5-ae25-558db0a3a947
+
+	measure 'Cost Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Cost per Stay], cost_trend[fiscal_year] = _y )
+		formatString: "$"#,0
+		displayFolder: KPI
+		lineageTag: 573640c3-2e13-53cf-ad68-0678ffaa4275
+
+	measure 'Agency Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Agency Staff Share], cost_trend[fiscal_year] = _y )
+		formatString: 0.0%
+		displayFolder: KPI
+		lineageTag: 58dfca2a-ebf6-542d-858d-21e4561a9ef7
+
+	measure 'Markup Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Markup], cost_trend[fiscal_year] = _y )
+		formatString: 0.0"x"
+		displayFolder: KPI
+		lineageTag: 4c7fc1f7-e0b4-5cd8-b482-84dd5c102011
+
+	measure 'Billed Sel' =
+			VAR _y = [Selected Year]
+			RETURN CALCULATE ( [Billed per Dollar], cost_trend[fiscal_year] = _y )
+		formatString: "$"0.00
+		displayFolder: KPI
+		lineageTag: a842bc45-5405-5c5f-927c-92ed16cd47ea
+
+	measure 'Cost Delta' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( SUM ( cost_trend[cost_per_stay] ), cost_trend[fiscal_year] = _y )
+			VAR _p = CALCULATE ( SUM ( cost_trend[cost_per_stay] ), cost_trend[fiscal_year] = _y - 1 )
+			VAR _d = DIVIDE ( _c - _p, _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & "%"
+			RETURN IF ( _y <= 2011 || ISBLANK ( _p ), "no earlier year",
+			    IF ( _d < 0, "▼ ", IF ( _d > 0, "▲ ", "● " ) ) & _t & " vs " & ( _y - 1 ) )
+		displayFolder: KPI
+		lineageTag: 4cf409f7-7173-5043-ad94-f7c13c469376
+
+	measure 'Cost Delta Colour' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( SUM ( cost_trend[cost_per_stay] ), cost_trend[fiscal_year] = _y )
+			VAR _p = CALCULATE ( SUM ( cost_trend[cost_per_stay] ), cost_trend[fiscal_year] = _y - 1 )
+			VAR _d = DIVIDE ( _c - _p, _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & "%"
+			RETURN IF ( _y <= 2011 || ISBLANK ( _p ), "#8FA5A3", IF ( _d <= 0, "#34D399", "#FF6B6B" ) )
+		displayFolder: KPI
+		lineageTag: 10ec1566-aac0-5759-9a14-bc69f36de594
+
+	measure 'Agency Delta' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( SUM ( cost_trend[agency_staff_share] ), cost_trend[fiscal_year] = _y )
+			VAR _p = CALCULATE ( SUM ( cost_trend[agency_staff_share] ), cost_trend[fiscal_year] = _y - 1 )
+			VAR _d = ( _c - _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & " pts"
+			RETURN IF ( _y <= 2011 || ISBLANK ( _p ), "no earlier year",
+			    IF ( _d < 0, "▼ ", IF ( _d > 0, "▲ ", "● " ) ) & _t & " vs " & ( _y - 1 ) )
+		displayFolder: KPI
+		lineageTag: 4de905d0-8f42-5994-9ff3-044ebae4d8db
+
+	measure 'Agency Delta Colour' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( SUM ( cost_trend[agency_staff_share] ), cost_trend[fiscal_year] = _y )
+			VAR _p = CALCULATE ( SUM ( cost_trend[agency_staff_share] ), cost_trend[fiscal_year] = _y - 1 )
+			VAR _d = ( _c - _p ) * 100
+			VAR _t = FORMAT ( ABS ( _d ), "0.0" ) & " pts"
+			RETURN IF ( _y <= 2011 || ISBLANK ( _p ), "#8FA5A3", IF ( _d <= 0, "#34D399", "#FF6B6B" ) )
+		displayFolder: KPI
+		lineageTag: cb5cf49c-bdd9-5270-9f58-3f4031bfdc76
+
+	measure 'Markup Delta' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( SUM ( cost_trend[charge_to_cost] ), cost_trend[fiscal_year] = _y )
+			VAR _p = CALCULATE ( SUM ( cost_trend[charge_to_cost] ), cost_trend[fiscal_year] = _y - 1 )
+			VAR _d = _c - _p
+			VAR _t = FORMAT ( ABS ( _d ), "0.00" ) & "x"
+			RETURN IF ( _y <= 2011 || ISBLANK ( _p ), "no earlier year",
+			    IF ( _d < 0, "▼ ", IF ( _d > 0, "▲ ", "● " ) ) & _t & " vs " & ( _y - 1 ) )
+		displayFolder: KPI
+		lineageTag: 52b9f5d7-1b1a-5822-b13a-8a0d566ac715
+
+	measure 'Markup Delta Colour' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( SUM ( cost_trend[charge_to_cost] ), cost_trend[fiscal_year] = _y )
+			VAR _p = CALCULATE ( SUM ( cost_trend[charge_to_cost] ), cost_trend[fiscal_year] = _y - 1 )
+			VAR _d = _c - _p
+			VAR _t = FORMAT ( ABS ( _d ), "0.00" ) & "x"
+			RETURN IF ( _y <= 2011 || ISBLANK ( _p ), "#8FA5A3", IF ( _d <= 0, "#34D399", "#FF6B6B" ) )
+		displayFolder: KPI
+		lineageTag: 350c6ab7-2e66-5613-ba1c-9bd963f55cbb
+
+	measure 'Billed Delta' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( SUM ( cost_trend[us_billed_per_dollar] ), cost_trend[fiscal_year] = _y )
+			VAR _p = CALCULATE ( SUM ( cost_trend[us_billed_per_dollar] ), cost_trend[fiscal_year] = _y - 1 )
+			VAR _d = _c - _p
+			VAR _t = FORMAT ( ABS ( _d ), "0.00" ) & "x"
+			RETURN IF ( _y <= 2013 || ISBLANK ( _p ), "no earlier year",
+			    IF ( _d < 0, "▼ ", IF ( _d > 0, "▲ ", "● " ) ) & _t & " vs " & ( _y - 1 ) )
+		displayFolder: KPI
+		lineageTag: 80938f36-bd76-53fa-b07f-fe71802bf61e
+
+	measure 'Billed Delta Colour' =
+			VAR _y = [Selected Year]
+			VAR _c = CALCULATE ( SUM ( cost_trend[us_billed_per_dollar] ), cost_trend[fiscal_year] = _y )
+			VAR _p = CALCULATE ( SUM ( cost_trend[us_billed_per_dollar] ), cost_trend[fiscal_year] = _y - 1 )
+			VAR _d = _c - _p
+			VAR _t = FORMAT ( ABS ( _d ), "0.00" ) & "x"
+			RETURN IF ( _y <= 2013 || ISBLANK ( _p ), "#8FA5A3", IF ( _d <= 0, "#34D399", "#FF6B6B" ) )
+		displayFolder: KPI
+		lineageTag: d32c8de4-9956-5371-85e4-c772e33afa5a
+
+	measure 'Cost Year Colour' = IF ( SELECTEDVALUE ( cost_trend[fiscal_year] ) = [Selected Year], "#FBBF24", "#35608F" )
+		displayFolder: Colours
+		lineageTag: 6792a527-9ade-5f2b-a3d0-33aa736a2b76
+
+	measure 'Cost Title' =
+			VAR _a = CALCULATE ( [Cost per Stay], cost_trend[fiscal_year] = 2011 )
+			VAR _b = CALCULATE ( [Cost per Stay], cost_trend[fiscal_year] = 2023 )
+			RETURN "A hospital stay now costs " & FORMAT ( _b, "$#,0" ) & ", up " & FORMAT ( _b / _a - 1, "0%" ) & " since 2011"
+		displayFolder: Titles
+		lineageTag: 3af409c1-6221-59bb-9e1e-b8ff82347c9d
+
+	measure 'Agency Title' =
+			VAR _a = CALCULATE ( [Agency Staff Share], cost_trend[fiscal_year] = 2019 )
+			VAR _b = CALCULATE ( [Agency Staff Share], cost_trend[fiscal_year] = 2022 )
+			RETURN "Agency staff went from " & FORMAT ( _a, "0.0%" ) & " to " & FORMAT ( _b, "0.0%" ) & " of salaries in 3 years"
+		displayFolder: Titles
+		lineageTag: 8f364af0-9d3a-5f43-9760-2d6b36651a17
+
+	column fiscal_year
+		dataType: int64
+		formatString: 0
+		lineageTag: cf532741-f085-547e-9ec9-e5445ddbd7f0
+		summarizeBy: none
+		sourceColumn: fiscal_year
+
+		annotation SummarizationSetBy = Automatic
+
+	column cost_per_stay
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 8bbfb467-c08d-53ea-a10d-c5ea74afba4b
+		summarizeBy: sum
+		sourceColumn: cost_per_stay
+
+		annotation SummarizationSetBy = Automatic
+
+	column agency_staff_share
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 2d024cbe-d381-55cb-85e5-b95c10aa5e99
+		summarizeBy: sum
+		sourceColumn: agency_staff_share
+
+		annotation SummarizationSetBy = Automatic
+
+	column charge_to_cost
+		dataType: double
+		formatString: #,0.00
+		lineageTag: b3240a39-5b11-591d-b296-e8b69bfb60f3
+		summarizeBy: sum
+		sourceColumn: charge_to_cost
+
+		annotation SummarizationSetBy = Automatic
+
+	column us_billed_per_dollar
+		dataType: double
+		formatString: #,0.00
+		lineageTag: d613c9bd-0483-5fc6-9410-bef85b2aa69c
+		summarizeBy: sum
+		sourceColumn: us_billed_per_dollar
+
+		annotation SummarizationSetBy = Automatic
+
+	partition cost_trend = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "cost_trend.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"fiscal_year", Int64.Type}, {"cost_per_stay", type number}, {"agency_staff_share", type number}, {"charge_to_cost", type number}, {"us_billed_per_dollar", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

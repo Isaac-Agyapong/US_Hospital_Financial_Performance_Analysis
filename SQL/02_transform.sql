@@ -30,7 +30,14 @@ SELECT r.file_year::smallint                                        AS fiscal_ye
        initcap(r.city)                                              AS city,
        initcap(r.county)                                            AS county,
        r.state_code                                                 AS state_abbrev,
-       CASE r.rural_urban WHEN 'R' THEN 'Rural' WHEN 'U' THEN 'Urban' END AS rural_urban,
+       -- Location, not payment status: since 2019 hundreds of city hospitals have asked Medicare to pay them as
+       -- rural (42 CFR 412.103), so the cost report's rural flag no longer means rural. CMS codes rural areas
+       -- as CBSA 999xx; every other 5-digit CBSA is a metro area. The flag is the fallback when CBSA is missing.
+       CASE WHEN r.cbsa ~ '^999\d\d$' THEN 'Rural'
+            WHEN r.cbsa ~ '^\d{5}$'    THEN 'Urban'
+            WHEN r.rural_urban = 'R'    THEN 'Rural'
+            WHEN r.rural_urban = 'U'    THEN 'Urban' END                AS rural_urban,
+       r.rural_urban = 'R' AND r.cbsa !~ '^999'                        AS paid_as_rural_in_city,
        r.facility_type,
        nullif(r.type_of_control, '')::int                           AS control_code,
        to_date(r.fy_begin, 'MM/DD/YYYY')                            AS fy_begin,
@@ -109,7 +116,7 @@ INSERT INTO core.fact_hospital_year
 SELECT o.ccn, o.fiscal_year,
        o.fy_begin, o.fy_end,
        extract(year FROM o.fy_begin + (o.fy_end - o.fy_begin) / 2 + interval '3 months')::smallint,
-       o.period_days, o.reports_in_year, o.ownership, o.rural_urban, o.beds, o.fte_employees, o.discharges,
+       o.period_days, o.reports_in_year, o.ownership, o.rural_urban, coalesce(o.paid_as_rural_in_city, false), o.beds, o.fte_employees, o.discharges,
        o.patient_days, o.medicare_days, o.medicaid_days, o.bed_days_available,
        o.net_patient_revenue, o.other_income,
        o.net_patient_revenue + coalesce(o.other_income, 0),

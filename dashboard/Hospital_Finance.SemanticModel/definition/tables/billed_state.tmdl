@@ -1,0 +1,65 @@
+table billed_state
+	lineageTag: d49edf5c-7604-5a14-aa2e-a8c68626c342
+
+	measure 'Top Billed' =
+			VAR _cur = SUM ( billed_state[billed_per_dollar] )
+			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( billed_state[state_name] ), "@b", CALCULATE ( SUM ( billed_state[billed_per_dollar] ) ) ), REMOVEFILTERS ( billed_state ) )
+			RETURN IF ( HASONEVALUE ( billed_state[state_name] ) && COUNTROWS ( FILTER ( _all, [@b] > _cur ) ) < 10, _cur )
+		formatString: "$"0.00
+		displayFolder: Costs
+		lineageTag: 1adfabd8-7b40-5300-9dfd-6eb6811732c9
+
+	column state_abbrev
+		dataType: string
+		lineageTag: 6ad8531f-348f-568d-a055-a86e962fa6c3
+		summarizeBy: none
+		sourceColumn: state_abbrev
+
+		annotation SummarizationSetBy = Automatic
+
+	column state_name
+		dataType: string
+		lineageTag: b164e0c0-ce26-54d0-965e-382fce47d967
+		summarizeBy: none
+		sourceColumn: state_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column hospitals
+		dataType: int64
+		formatString: 0
+		lineageTag: bdb2737c-21b0-54ac-89ba-9b988ef8da8a
+		summarizeBy: sum
+		sourceColumn: hospitals
+
+		annotation SummarizationSetBy = Automatic
+
+	column billed_per_dollar
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 9337550c-d8ea-5312-a859-5c5bb14a0bf3
+		summarizeBy: sum
+		sourceColumn: billed_per_dollar
+
+		annotation SummarizationSetBy = Automatic
+
+	column us_billed_per_dollar
+		dataType: double
+		formatString: #,0.00
+		lineageTag: ba17c554-e992-5093-92d7-48f770562cc2
+		summarizeBy: sum
+		sourceColumn: us_billed_per_dollar
+
+		annotation SummarizationSetBy = Automatic
+
+	partition billed_state = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "billed_state.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"state_abbrev", type text}, {"state_name", type text}, {"hospitals", Int64.Type}, {"billed_per_dollar", type number}, {"us_billed_per_dollar", type number}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
