@@ -12,7 +12,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Financial health overview",
+                    "value": "U.S. Hospitals Financial Health Performance Overview",
                     "textStyle": {
                       "fontSize": "19pt",
                       "color": "#EEF4F3",
@@ -25,7 +25,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "How many US hospitals lose money, and is it getting better? Use the filters on the left to focus on a year or a group.",
+                    "value": "Profits and losses of U.S. hospitals, 2011-2023, from their yearly reports to Medicare. Filter by year or group on the left.",
                     "textStyle": {
                       "fontSize": "10pt",
                       "color": "#8FA5A3"

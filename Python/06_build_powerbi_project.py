@@ -360,7 +360,9 @@ MEASURES += [
      '    & IF ( ISFILTERED ( hospital_year[ownership] ), "  ·  " & CONCATENATEX ( VALUES ( hospital_year[ownership] ), hospital_year[ownership], ", " ) )\n'
      '    & IF ( ISFILTERED ( hospital_year[rural_urban] ), "  ·  " & CONCATENATEX ( VALUES ( hospital_year[rural_urban] ), hospital_year[rural_urban], ", " ) )\n'
      '    & IF ( ISFILTERED ( states[state_name] ), "  ·  " & CONCATENATEX ( VALUES ( states[state_name] ), states[state_name], ", " ) )\n'
-     'RETURN "Showing " & [Selected Year] & IF ( _f = "", "  ·  all US hospitals", _f )', None, "Core"),
+     'VAR _y = [Selected Year]\n'
+     f'VAR _n = CALCULATE ( COUNTROWS ( hospital_year ), {Y} = _y )\n'
+     'RETURN _y & "  ·  " & FORMAT ( _n, "#,0" ) & " hospitals" & IF ( _f = "", "  ·  all of the US", _f )', None, "Core"),
 ]
 
 CALC_COLUMNS = [
@@ -782,8 +784,8 @@ def build_pages():
     # ---------------------------------------------------------------- 1. Overview
     p1 = Page("overview", "Overview")
     sidebar(p1)
-    header(p1, "Financial health overview",
-           "How many US hospitals lose money, and is it getting better? Use the filters on the left to focus on a year or a group.")
+    header(p1, "U.S. Hospitals Financial Health Performance Overview",
+           "Profits and losses of U.S. hospitals, 2011-2023, from their yearly reports to Medicare. Filter by year or group on the left.")
     kpi_row(p1, [
         ("↘", "Hospitals losing money", CORAL, "Losing Sel", "Losing Delta", "Losing Delta Colour",
          ("hospital_year", "fiscal_year", "Losing Share", CORAL)),

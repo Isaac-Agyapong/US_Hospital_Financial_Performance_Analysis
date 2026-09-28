@@ -414,7 +414,9 @@ table hospital_year
 			    & IF ( ISFILTERED ( hospital_year[ownership] ), "  ·  " & CONCATENATEX ( VALUES ( hospital_year[ownership] ), hospital_year[ownership], ", " ) )
 			    & IF ( ISFILTERED ( hospital_year[rural_urban] ), "  ·  " & CONCATENATEX ( VALUES ( hospital_year[rural_urban] ), hospital_year[rural_urban], ", " ) )
 			    & IF ( ISFILTERED ( states[state_name] ), "  ·  " & CONCATENATEX ( VALUES ( states[state_name] ), states[state_name], ", " ) )
-			RETURN "Showing " & [Selected Year] & IF ( _f = "", "  ·  all US hospitals", _f )
+			VAR _y = [Selected Year]
+			VAR _n = CALCULATE ( COUNTROWS ( hospital_year ), hospital_year[fiscal_year] = _y )
+			RETURN _y & "  ·  " & FORMAT ( _n, "#,0" ) & " hospitals" & IF ( _f = "", "  ·  all of the US", _f )
 		displayFolder: Core
 		lineageTag: 72072199-9b1c-5b86-9a20-1ea7de299e4a
 
