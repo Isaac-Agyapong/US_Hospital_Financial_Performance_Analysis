@@ -99,7 +99,11 @@ def sidebar(im, page, colors):
     d.text((18 * S, 80 * S), "4,300 HOSPITALS  ·  2011-2023", font=font("segoeui.ttf", 8), fill=hex_rgb(colors["muted"]))
     d.line([18 * S, 100 * S, 206 * S, 100 * S], fill=hex_rgb(colors["tile_border"]), width=S)
     for text, y in page["sidebar_labels"]:
-        d.text((20 * S, y * S), text, font=font("seguisb.ttf", 8), fill=hex_rgb(colors["muted"]))
+        heading = text.isupper()
+        # filter labels sit just above their dropdown box (which fills the lower part of its visual)
+        d.text((20 * S if heading else 16 * S, (y if heading else y + 1) * S), text,
+               font=font("seguisb.ttf", 9.5 if heading else 13),
+               fill=hex_rgb(colors["muted"] if heading else colors["text"]))
 
 
 def render(name, page, colors):

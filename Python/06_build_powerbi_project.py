@@ -181,10 +181,11 @@ MEASURES = [
      'RETURN "Rural: " & FORMAT ( _r, "0%" ) & " lost money vs " & FORMAT ( _u, "0%" ) & " of urban hospitals (" & _y & ")"',
      None, "Titles"),
     ("hospital_year", "Top 8 Losing",
-     "// ranks every state, whatever else is clicked (REMOVEFILTERS, not ALLSELECTED)\n"
-     "VAR _cur = [Losing Sel]\n"
-     'VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) )\n'
-     "RETURN IF ( HASONEVALUE ( states[state_name] ) && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 8, _cur )", PCT, "Charts"),
+     "// ranks every state, whatever else is clicked (REMOVEFILTERS, not ALLSELECTED); states with fewer than\n"
+     "// 5 hospitals in the current selection are not ranked (one or two hospitals would show as 100%)\n"
+     "VAR _cur = [Losing Sel]\nVAR _n = [State Hospitals Sel]\n"
+     'VAR _all = CALCULATETABLE ( FILTER ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel], "@n", [State Hospitals Sel] ), [@n] >= 5 ), REMOVEFILTERS ( states ) )\n'
+     "RETURN IF ( HASONEVALUE ( states[state_name] ) && _n >= 5 && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 8, _cur )", PCT, "Charts"),
     ("hospital_year", "States Title", SEL + 'RETURN "States with the most hospitals losing money, " & _y', None, "Titles"),
     ("hospital_year", "Year Colour", f'IF ( SELECTEDVALUE ( {Y} ) = [Selected Year], "{AMBER}", "{CORAL}" )', None, "Colours"),
 
@@ -226,9 +227,9 @@ MEASURES = [
     ("hospital_year", "State Hospitals Sel", SEL + f"RETURN {at_y('Hospital Count')}", INT, "States"),
     ("hospital_year", "State Margin Sel", SEL + f"RETURN {at_y('Typical Margin')}", PCT1, "States"),
     ("hospital_year", "Top 10 Losing",
-     "VAR _cur = [Losing Sel]\n"
-     'VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) )\n'
-     "RETURN IF ( HASONEVALUE ( states[state_name] ) && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 10, _cur )", PCT, "States"),
+     "VAR _cur = [Losing Sel]\nVAR _n = [State Hospitals Sel]\n"
+     'VAR _all = CALCULATETABLE ( FILTER ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel], "@n", [State Hospitals Sel] ), [@n] >= 5 ), REMOVEFILTERS ( states ) )\n'
+     "RETURN IF ( HASONEVALUE ( states[state_name] ) && _n >= 5 && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 10, _cur )", PCT, "States"),
     ("hospital_year", "Top 10 Margin", "IF ( NOT ISBLANK ( [Top 10 Losing] ), [State Margin Sel] )", PCT1, "States"),
     ("hospital_year", "Top 10 Hospitals", "IF ( NOT ISBLANK ( [Top 10 Losing] ), [State Hospitals Sel] )", INT, "States"),
     ("hospital_year", "Worst State",
@@ -638,10 +639,12 @@ def sparkline(entity, axis_col, measure, colour):
 def slicer(entity, prop, header, group, default=None, search=False):
     v = {"visualType": "slicer", "query": {"queryState": {"Values": projections([C(entity, prop)])}},
          "objects": {"data": [{"properties": {"mode": s("Dropdown")}}],
-                     "header": [{"properties": {"show": lit("true"), "text": s(header), "fontColor": solid(MUTED),
-                                                "fontSize": lit("9D"), "fontFamily": s(FONT_BOLD)}}],
+                     # the label is drawn in the sidebar artwork above the box, so the visual is only the box
+                     "header": [{"properties": {"show": lit("false")}}],
                      "items": [{"properties": {"fontColor": solid(TEXT), "background": solid(TILE), "fontSize": lit("10D")}}]},
-         "visualContainerObjects": container(pad=(2, 2, 8, 8), background=TILE, radius=8),
+         "visualContainerObjects": {**container(pad=(0, 0, 0, 0)),
+                                    # no hover toolbar: it would sit on top of the filter above and block clicks
+                                    "visualHeader": [{"properties": {"show": lit("false")}}]},
          "drillFilterOtherVisuals": True,
          "syncGroup": {"groupName": group, "fieldChanges": True, "filterChanges": True}}
     general = {}
@@ -678,7 +681,8 @@ def navigator():
                               state("selected", {"show": lit("true"), "position": s("Left"), "width": lit("3D"),
                                                  "accentBarColor": solid(MINT)})],
             },
-            "visualContainerObjects": {"background": [{"properties": {"show": lit("false")}}]}}
+            "visualContainerObjects": {"background": [{"properties": {"show": lit("false")}}],
+                                       "visualHeader": [{"properties": {"show": lit("false")}}]}}
 
 
 class Page:
@@ -728,23 +732,29 @@ FULL = 706 - R1
 def sidebar(page, filters="all"):
     page.sidebar_labels.append(("PAGES", 104))
     page.add("navigator", 8, 116, 208, 172, navigator())
-    if filters == "all" or filters == "year":
+
+    def box(vid, y, label, visual):
+        """Label in the artwork, then the dropdown box: 56 px per filter so nothing overlaps."""
+        page.sidebar_labels.append((label, y))
+        page.add(vid, 14, y + 12, 196, 40, visual)
+
+    if filters in ("all", "year"):
         page.sidebar_labels.append(("FILTERS", 304))
-        page.add("fYear", 12, 322, 200, 58, slicer("Years", "year", "Year", "year", default=2023))
+        box("fYear", 326, "Year", slicer("Years", "year", "Year", "year", default=2023))
     if filters == "all":
-        page.add("fType", 12, 384, 200, 58, slicer("hospital_year", "hospital_type", "Hospital type", "type"))
-        page.add("fOwner", 12, 446, 200, 58, slicer("hospital_year", "ownership", "Owner", "owner"))
-        page.add("fArea", 12, 508, 200, 58, slicer("hospital_year", "rural_urban", "Rural or urban", "area"))
-        page.add("fState", 12, 570, 200, 58, slicer("states", "state_name", "State", "state", search=True))
+        box("fType", 382, "Hospital type", slicer("hospital_year", "hospital_type", "Hospital type", "type"))
+        box("fOwner", 438, "Owner", slicer("hospital_year", "ownership", "Owner", "owner"))
+        box("fArea", 494, "Rural or urban", slicer("hospital_year", "rural_urban", "Rural or urban", "area"))
+        box("fState", 550, "State", slicer("states", "state_name", "State", "state", search=True))
     if filters == "year":
-        page.add("costNote", 14, 388, 196, 60, textbox(
+        page.add("costNote", 14, 386, 196, 60, textbox(
             [("Costs and prices are national figures for general hospitals, so only the year filter applies here.",
               9, False, MUTED)]))
     if filters == "hospital":
         page.sidebar_labels.append(("LOOK UP", 304))
-        page.add("search", 12, 322, 200, 58, slicer("hospital_profile", "hospital_label", "Hospital name", "hospital",
-                                                     default="Cleveland Clinic Hospital (Cleveland, OH)", search=True))
-        page.add("searchNote", 14, 388, 196, 60, textbox(
+        box("search", 326, "Hospital name", slicer("hospital_profile", "hospital_label", "Hospital name", "hospital",
+                                                   default="Cleveland Clinic Hospital (Cleveland, OH)", search=True))
+        page.add("searchNote", 14, 386, 196, 60, textbox(
             [("Open the box and type part of a name, for example Mayo or Memorial.", 9, False, MUTED)]))
     page.add("credit", 14, 642, 200, 64, textbox(
         [("Data: CMS Hospital Cost Reports 2011-2023, CMS Medicare inpatient file, KFF", 8, False, MUTED),

@@ -90,6 +90,26 @@
         [
           "FILTERS",
           304
+        ],
+        [
+          "Year",
+          326
+        ],
+        [
+          "Hospital type",
+          382
+        ],
+        [
+          "Owner",
+          438
+        ],
+        [
+          "Rural or urban",
+          494
+        ],
+        [
+          "State",
+          550
         ]
       ]
     },
@@ -128,6 +148,26 @@
         [
           "FILTERS",
           304
+        ],
+        [
+          "Year",
+          326
+        ],
+        [
+          "Hospital type",
+          382
+        ],
+        [
+          "Owner",
+          438
+        ],
+        [
+          "Rural or urban",
+          494
+        ],
+        [
+          "State",
+          550
         ]
       ]
     },
@@ -196,6 +236,26 @@
         [
           "FILTERS",
           304
+        ],
+        [
+          "Year",
+          326
+        ],
+        [
+          "Hospital type",
+          382
+        ],
+        [
+          "Owner",
+          438
+        ],
+        [
+          "Rural or urban",
+          494
+        ],
+        [
+          "State",
+          550
         ]
       ]
     },
@@ -270,6 +330,10 @@
         [
           "FILTERS",
           304
+        ],
+        [
+          "Year",
+          326
         ]
       ]
     },
@@ -344,6 +408,10 @@
         [
           "LOOK UP",
           304
+        ],
+        [
+          "Hospital name",
+          326
         ]
       ]
     },

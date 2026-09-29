@@ -211,10 +211,12 @@ table hospital_year
 		lineageTag: ff15b35f-560c-547a-a8e6-9c3d3a2e8543
 
 	measure 'Top 8 Losing' =
-			// ranks every state, whatever else is clicked (REMOVEFILTERS, not ALLSELECTED)
+			// ranks every state, whatever else is clicked (REMOVEFILTERS, not ALLSELECTED); states with fewer than
+			// 5 hospitals in the current selection are not ranked (one or two hospitals would show as 100%)
 			VAR _cur = [Losing Sel]
-			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) )
-			RETURN IF ( HASONEVALUE ( states[state_name] ) && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 8, _cur )
+			VAR _n = [State Hospitals Sel]
+			VAR _all = CALCULATETABLE ( FILTER ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel], "@n", [State Hospitals Sel] ), [@n] >= 5 ), REMOVEFILTERS ( states ) )
+			RETURN IF ( HASONEVALUE ( states[state_name] ) && _n >= 5 && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 8, _cur )
 		formatString: 0%
 		displayFolder: Charts
 		lineageTag: b8a25938-91d1-5859-a452-7990b749e097
@@ -316,8 +318,9 @@ table hospital_year
 
 	measure 'Top 10 Losing' =
 			VAR _cur = [Losing Sel]
-			VAR _all = CALCULATETABLE ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel] ), REMOVEFILTERS ( states ) )
-			RETURN IF ( HASONEVALUE ( states[state_name] ) && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 10, _cur )
+			VAR _n = [State Hospitals Sel]
+			VAR _all = CALCULATETABLE ( FILTER ( ADDCOLUMNS ( VALUES ( states[state_name] ), "@r", [Losing Sel], "@n", [State Hospitals Sel] ), [@n] >= 5 ), REMOVEFILTERS ( states ) )
+			RETURN IF ( HASONEVALUE ( states[state_name] ) && _n >= 5 && COUNTROWS ( FILTER ( _all, [@r] > _cur ) ) < 10, _cur )
 		formatString: 0%
 		displayFolder: States
 		lineageTag: 55f1fa77-b714-5c86-ba84-acf13baeee24
