@@ -922,8 +922,8 @@ def build_pages():
                                                                    "hideText": lit("false")}},
                                        "selector": {"metadata": "hospital_year.Top 10 Losing"}}],
                  "columnWidth": [{"properties": {"value": lit(f"{w}D")}, "selector": {"metadata": k}} for k, w in {
-                     "states.state_name": 88, "states.medicaid_status": 104, "hospital_year.Top 10 Hospitals": 66,
-                     "hospital_year.Top 10 Losing": 90, "hospital_year.Top 10 Margin": 66}.items()]}))
+                     "states.state_name": 100, "states.medicaid_status": 96, "hospital_year.Top 10 Hospitals": 74,
+                     "hospital_year.Top 10 Losing": 84, "hospital_year.Top 10 Margin": 62}.items()]}))
     p3.tile("unpaid", X0 + 560 + GAP, R2, tw, RH, chart(
         "lineChart", {"Category": [C("unpaid_care", "fiscal_year", "Year")], "Series": [C("unpaid_care", "medicaid_status", "Medicaid")],
                       "Y": [M("Unpaid Care Share", "Unpaid care, share of costs")]},
