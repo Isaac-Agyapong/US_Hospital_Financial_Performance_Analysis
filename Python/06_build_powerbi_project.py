@@ -816,11 +816,11 @@ def build_pages():
         "=Donut Title", None,
         objects={"labels": [{"properties": {"show": lit("true"), "labelStyle": s("Percent of total"), "color": solid(TEXT),
                                             "fontSize": lit("11D"), "percentageLabelPrecision": lit("0L")}}],
-                 "legend": [{"properties": {"show": lit("true"), "position": s("Right"), "labelColor": solid(TEXT),
+                 "legend": [{"properties": {"show": lit("true"), "position": s("Bottom"), "labelColor": solid(TEXT),
                                             "fontSize": lit("10D"), "showTitle": lit("false")}}],
                  "slices": [{"properties": {"innerRadiusRatio": lit("62L")}}],
                  "dataPoint": fill_by_value("hospital_year", "ownership",
-                                            {"Nonprofit": SKY, "For-profit": VIOLET, "Government": SLATE})}))
+                                            {"Nonprofit": "#38BDF8", "For-profit": "#F472B6", "Government": "#E2E8F0"})}))
     p1.tile("areaType", X0 + third + GAP, R2, third, RH, chart(
         "clusteredBarChart", {"Category": [C("hospital_year", "area_type", "Group")], "Y": [M("Losing Sel", "Share losing money")]},
         "=Area Title", "Amber = rural, blue = urban",
