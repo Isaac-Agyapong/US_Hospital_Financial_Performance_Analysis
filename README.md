@@ -21,8 +21,10 @@ Medicare hospital files with the federal government (about 4,300 hospitals a yea
 > an interactive dashboard where anyone can filter by year, hospital type, owner, rural or city, and state, or look
 > up a single hospital.
 >
-> **Next:** a companion machine learning project will use this data to predict which hospitals are likely to fall
-> into financial trouble in the next two years.
+> **Machine learning follow-up:** my
+> [Hospital Financial Distress Model](https://github.com/Isaac-Agyapong/Hospital_Financial_Distress_Model) uses this
+> data to predict which hospitals will lose money two years in a row
+> ([▶ live app](https://hospital-risk-forecast.streamlit.app/)).
 
 The sections below go into technical detail.
 
@@ -52,7 +54,7 @@ stress" means losing money two years in a row. Every number comes from [SQL/quer
 ## Recommendations
 
 1. **Use two years of losses as an early warning.** A single bad year is common; two in a row is a sign of lasting
-   trouble. State health departments and lenders can watch this list every year (the companion ML project turns it
+   trouble. State health departments and lenders can watch this list every year (the [companion ML project](https://github.com/Isaac-Agyapong/Hospital_Financial_Distress_Model) turns it
    into a forecast).
 2. **Target help at rural government hospitals.** They lose money most often, and they are often the only hospital
    nearby.
